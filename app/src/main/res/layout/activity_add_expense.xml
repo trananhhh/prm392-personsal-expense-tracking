@@ -45,7 +45,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/light_bg"
-                android:hint="@string/add_expense_amount_placeholder" />
+                android:hint="@string/add_expense_amount_placeholder"
+                android:id="@+id/textAddExpenseAmount"
+                android:inputType="number"
+                />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout

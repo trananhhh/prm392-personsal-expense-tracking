@@ -31,9 +31,12 @@ public class ExpenseType {
     }
 
     public static void initExpenseType(){
-        expenseTypeList.add(new ExpenseType(1, "Income"));
-        expenseTypeList.add(new ExpenseType(1, "Outcome"));
-        expenseTypeList.add(new ExpenseType(1, "Loan / Debt"));
+        expenseTypeList.clear();
+        if (expenseTypeList.isEmpty()){
+            expenseTypeList.add(new ExpenseType(1, "Income"));
+            expenseTypeList.add(new ExpenseType(1, "Outcome"));
+            expenseTypeList.add(new ExpenseType(1, "Loan / Debt"));
+        }
     }
 
     public static ArrayList<ExpenseType> getExpenseTypeList(){

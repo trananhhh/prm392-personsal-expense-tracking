@@ -17,6 +17,10 @@ public class Category {
         3. Loan / Debt
      */
 
+    public Category() {
+        initCategory();
+    }
+
     public Category(String cate_name) {
         this.cate_name = cate_name;
     }
@@ -75,12 +79,15 @@ public class Category {
     }
 
     public static void initCategory(){
-        categoriesList.add(new Category(1, "Shopping", -1, 2));
-        categoriesList.add(new Category(2, "Food & Beverage", -1, 2));
-        categoriesList.add(new Category(3, "Transport", -1, 2));
-        categoriesList.add(new Category(4, "Bills & Utilities", -1, 2));
-        categoriesList.add(new Category(5, "Other", -1, 2));
-        categoriesList.add(new Category(6, "Salary", -1, 1));
+        categoriesList.clear();
+        if(categoriesList.isEmpty()){
+            categoriesList.add(new Category(1, "Shopping", -1, 2));
+            categoriesList.add(new Category(2, "Food & Beverage", -1, 2));
+            categoriesList.add(new Category(3, "Transport", -1, 2));
+            categoriesList.add(new Category(4, "Bills & Utilities", -1, 2));
+            categoriesList.add(new Category(5, "Other", -1, 2));
+            categoriesList.add(new Category(6, "Salary", -1, 1));
+        }
     }
 
     public int getImage(){

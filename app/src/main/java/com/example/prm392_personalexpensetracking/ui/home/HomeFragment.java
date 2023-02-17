@@ -2,6 +2,7 @@ package com.example.prm392_personalexpensetracking.ui.home;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,14 +65,17 @@ public class HomeFragment extends Fragment {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        setStats(binding);
+        bindingRecyclerView(binding);
+
         addExpenseFab = binding.addExpenseFab;
         addExpenseFab.setOnClickListener(view -> {
             Intent intent = new Intent(getActivity(), AddExpenseActivity.class);
             startActivity(intent);
         });
 
-        bindingRecyclerView(binding);
-        setStats(binding);
+        Log.d("HomeFragment", "onCreateView");
+
         return root;
     }
 

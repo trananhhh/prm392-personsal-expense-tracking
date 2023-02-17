@@ -21,6 +21,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        ExpenseType.initExpenseType();
+        Category.initCategory();
+        Expense.initExpenseList();
+
         super.onCreate(savedInstanceState);
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
@@ -33,10 +37,6 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
-
-        ExpenseType.initExpenseType();
-        Category.initCategory();
-        Expense.initExpenseList();
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
