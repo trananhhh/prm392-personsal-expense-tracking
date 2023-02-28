@@ -1,5 +1,7 @@
 package com.example.prm392_personalexpensetracking.model;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -65,6 +67,7 @@ public class Expense {
     }
 
     public static void addExpense(Expense ex){
+        Log.d("TEST", "addExpense");
         expensesList.add(ex);
         expensesList.sort((Expense ex1, Expense ex2) -> ex2.getCreateAt().compareTo(ex1.getCreateAt()));
     }
@@ -78,7 +81,7 @@ public class Expense {
             expensesList.add(new Expense("2", 2, "Bún đậu", 40000, new Date()));
 
 
-            c.set(2023, 1, 1);
+            c.set(2024, 1, 1);
             expensesList.add(new Expense("3", 2, "Le Monde Steak", 650000, c.getTime()));
             expensesList.add(new Expense("4", 3, "Bus", 18000, new Date()));
 

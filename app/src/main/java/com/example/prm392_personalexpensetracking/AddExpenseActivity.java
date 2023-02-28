@@ -55,7 +55,6 @@ public class AddExpenseActivity extends AppCompatActivity {
         categorySpinner.setAdapter(categoryAdapter);
 
 //      DatePicker setup
-
         year = cal.get(Calendar.YEAR);
         month = cal.get(Calendar.MONTH);
         day = cal.get(Calendar.DAY_OF_MONTH);

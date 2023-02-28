@@ -42,8 +42,9 @@ public class ExpensesDayAdapter extends RecyclerView.Adapter<ExpensesDayAdapter.
         Category category = Category.getCategoryById(expense.getCate_id());
 
         holder.catTitle.setText(category.getCate_name());
-        holder.description.setText(expense.getDescription());
+        holder.description.setText(expense.getCreateAt().toString());
         holder.price.setText(MainActivity.intToMoneyFormat(expense.getAmount()));
+        holder.catIcon.setImageResource(category.getImage());
 
         if(category.getType() == 1)
             holder.price.setTextColor(ContextCompat.getColor(context, R.color.green_income));

@@ -36,6 +36,9 @@ public class HomeFragment extends Fragment {
     private ExtendedFloatingActionButton addExpenseFab;
 
     private void setStats(FragmentHomeBinding binding){
+        totalExpenses = 0;
+        totalIncome = 0;
+
         expenseStat = binding.expenseStat;
         balanceStat = binding.balanceStat;
         incomeStat = binding.incomeStat;

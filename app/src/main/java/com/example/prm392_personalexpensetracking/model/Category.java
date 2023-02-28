@@ -87,6 +87,18 @@ public class Category {
             categoriesList.add(new Category(4, "Bills & Utilities", -1, 2));
             categoriesList.add(new Category(5, "Other", -1, 2));
             categoriesList.add(new Category(6, "Salary", -1, 1));
+            categoriesList.add(new Category(7, "Cafe", -1, 2));
+            categoriesList.add(new Category(8, "Donate", -1, 2));
+            categoriesList.add(new Category(9, "Education", -1, 2));
+            categoriesList.add(new Category(10, "Electronics", -1, 2));
+            categoriesList.add(new Category(11, "Fuel", -1, 2));
+            categoriesList.add(new Category(12, "Gifts", -1, 1));
+            categoriesList.add(new Category(13, "Health", -1, 2));
+            categoriesList.add(new Category(14, "Maintenance", -1, 2));
+            categoriesList.add(new Category(15, "Party", -1, 2));
+            categoriesList.add(new Category(16, "Self Development", -1, 2));
+            categoriesList.add(new Category(17, "Sport", -1, 2));
+            categoriesList.add(new Category(18, "Savings", -1, 2));
         }
     }
 
@@ -104,8 +116,33 @@ public class Category {
                 return R.drawable.money;
             case 6:
                 return R.drawable.institute;
+            case 7:
+                return R.drawable.cafe;
+            case 8:
+                return R.drawable.donate;
+            case 9:
+                return R.drawable.education;
+            case 10:
+                return R.drawable.electronics;
+            case 11:
+                return R.drawable.fuel;
+            case 12:
+                return R.drawable.gifts;
+            case 13:
+                return R.drawable.health;
+            case 14:
+                return R.drawable.maintenance;
+            case 15:
+                return R.drawable.party;
+            case 16:
+                return R.drawable.self_development;
+            case 17:
+                return R.drawable.sport;
+            case 18:
+                return R.drawable.savings;
         }
-        return R.drawable.groceries;
+//        return R.drawable.groceries;
+        return 0;
     }
     public static ArrayList<Category> getCategoryList(){
         return categoriesList;
