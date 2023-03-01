@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "143401430617",
+    "firebase_url": "https://swd392-project-default-rtdb.firebaseio.com",
+    "project_id": "swd392-project",
+    "storage_bucket": "swd392-project.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:143401430617:android:f19914d80f2c0f356c4b48",
+        "android_client_info": {
+          "package_name": "com.example.prm392_personalexpensetracking"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "143401430617-g94p3b2bhdlubvsteni31l1jp90r6bu9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4K2sxjr1IfyayhFnMvJsuoV71nAA50E4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "143401430617-g94p3b2bhdlubvsteni31l1jp90r6bu9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
