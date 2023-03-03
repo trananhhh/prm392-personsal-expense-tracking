@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddExpenseActivity">
+    tools:context=".ExpenseActivity">
 
     <LinearLayout
         android:id="@+id/linearLayout2"
@@ -66,14 +66,13 @@
 
         <Button
             android:id="@+id/btnDatePicker"
+            style="@style/Widget.MaterialComponents.TimePicker.Button"
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:layout_marginVertical="12dp"
             android:text="@string/add_expense_date_placeholder"
             android:textColor="@color/black"
-            android:textSize="16sp"
-            style="?android:spinnerStyle"
-        />
+            android:textSize="16sp" />
 
 <!--        <com.google.android.material.chip.ChipGroup-->
 <!--            android:id="@+id/chipContainer"-->
@@ -113,10 +112,22 @@
 
         <Button
             android:id="@+id/saveExpenseBtn"
+            style="@style/Widget.MaterialComponents.Button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:text="@string/add_expense_save_btn" />
+
+        <Button
+            android:id="@+id/deleteExpenseBtn"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/delete"
+            android:textColor="#F44336"
+            android:visibility="invisible"
+            app:strokeColor="#F44336" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

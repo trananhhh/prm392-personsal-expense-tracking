@@ -3,6 +3,7 @@ package com.example.prm392_personalexpensetracking.model;
 import com.example.prm392_personalexpensetracking.R;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class Category {
     public static ArrayList<Category> categoriesList = new ArrayList<>();
@@ -81,24 +82,30 @@ public class Category {
     public static void initCategory(){
         categoriesList.clear();
         if(categoriesList.isEmpty()){
-            categoriesList.add(new Category(1, "Shopping", -1, 2));
-            categoriesList.add(new Category(2, "Food & Beverage", -1, 2));
-            categoriesList.add(new Category(3, "Transport", -1, 2));
-            categoriesList.add(new Category(4, "Bills & Utilities", -1, 2));
-            categoriesList.add(new Category(5, "Other", -1, 2));
-            categoriesList.add(new Category(6, "Salary", -1, 1));
-            categoriesList.add(new Category(7, "Cafe", -1, 2));
-            categoriesList.add(new Category(8, "Donate", -1, 2));
-            categoriesList.add(new Category(9, "Education", -1, 2));
-            categoriesList.add(new Category(10, "Electronics", -1, 2));
-            categoriesList.add(new Category(11, "Fuel", -1, 2));
-            categoriesList.add(new Category(12, "Gifts", -1, 1));
-            categoriesList.add(new Category(13, "Health", -1, 2));
-            categoriesList.add(new Category(14, "Maintenance", -1, 2));
-            categoriesList.add(new Category(15, "Party", -1, 2));
-            categoriesList.add(new Category(16, "Self Development", -1, 2));
-            categoriesList.add(new Category(17, "Sport", -1, 2));
-            categoriesList.add(new Category(18, "Savings", -1, 2));
+            categoriesList.add(new Category(2, "Food & Beverage", -1, 1));
+            categoriesList.add(new Category(15, "Party", 2, 1));
+            categoriesList.add(new Category(7, "Cafe", 2, 1));
+
+            categoriesList.add(new Category(16, "Self Development", -1, 1));
+            categoriesList.add(new Category(9, "Education", 16, 1));
+            categoriesList.add(new Category(17, "Sport", 16, 1));
+            categoriesList.add(new Category(13, "Health", 16, 1));
+
+            categoriesList.add(new Category(1, "Shopping", -1, 1));
+            categoriesList.add(new Category(10, "Electronics", 1, 1));
+
+            categoriesList.add(new Category(3, "Transport", -1, 1));
+            categoriesList.add(new Category(14, "Maintenance", 3, 1));
+            categoriesList.add(new Category(11, "Fuel", 3, 1));
+
+            categoriesList.add(new Category(4, "Bills & Utilities", -1, 1));
+            categoriesList.add(new Category(8, "Donate", -1, 1));
+            categoriesList.add(new Category(18, "Savings", -1, 1));
+            categoriesList.add(new Category(5, "Other", -1, 1));
+
+            categoriesList.add(new Category(6, "Salary", -1, 2));
+            categoriesList.add(new Category(12, "Gifts", -1, 2));
+            categoriesList.add(new Category(19, "Other", -1, 2));
         }
     }
 
@@ -113,6 +120,7 @@ public class Category {
             case 4:
                 return R.drawable.laundry;
             case 5:
+            case 19:
                 return R.drawable.money;
             case 6:
                 return R.drawable.institute;
@@ -144,7 +152,7 @@ public class Category {
 //        return R.drawable.groceries;
         return 0;
     }
-    public static ArrayList<Category> getCategoryList(){
-        return categoriesList;
+    public static ArrayList<Category> getCategoryList(int cateTypeId){
+        return new ArrayList<Category>(categoriesList.stream().filter(category -> category.getType() == cateTypeId).collect(Collectors.toList()));
     }
 }

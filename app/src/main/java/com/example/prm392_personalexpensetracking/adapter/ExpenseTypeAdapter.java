@@ -30,7 +30,7 @@ public class ExpenseTypeAdapter extends ArrayAdapter<ExpenseType> {
         ExpenseType expenseType = getItem(position);
 
         TextView expenseTypeTitle = rowView.findViewById(R.id.expenseTypeTitle);
-        expenseTypeTitle.setText(expenseType.getExpense_type_title());
+        expenseTypeTitle.setText(expenseType.getExpenseTypeTitle());
 
         return rowView;
     }
@@ -42,7 +42,7 @@ public class ExpenseTypeAdapter extends ArrayAdapter<ExpenseType> {
 
         ExpenseType expenseType = getItem(position);
         TextView expenseTypeTitle = convertView.findViewById(R.id.expenseTypeTitle);
-        expenseTypeTitle.setText(expenseType.getExpense_type_title());
+        expenseTypeTitle.setText(expenseType.getExpenseTypeTitle());
 
         return convertView;
     }

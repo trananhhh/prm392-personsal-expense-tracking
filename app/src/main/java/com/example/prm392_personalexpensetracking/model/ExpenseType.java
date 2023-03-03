@@ -1,42 +1,39 @@
 package com.example.prm392_personalexpensetracking.model;
 
-import com.example.prm392_personalexpensetracking.R;
-
 import java.util.ArrayList;
 
 public class ExpenseType {
-    private static ArrayList<ExpenseType> expenseTypeList = new ArrayList<>();
-    private int expense_type_id;
-    private String expense_type_title;
+    private static final ArrayList<ExpenseType> expenseTypeList = new ArrayList<>();
+    private int expenseTypeId;
+    private String expenseTypeTitle;
 
-    public ExpenseType(int expense_type_id, String expense_type_title) {
-        this.expense_type_id = expense_type_id;
-        this.expense_type_title = expense_type_title;
+    public ExpenseType(int expenseTypeId, String expenseTypeTitle) {
+        this.expenseTypeId = expenseTypeId;
+        this.expenseTypeTitle = expenseTypeTitle;
     }
 
-    public int getExpense_type_id() {
-        return expense_type_id;
+    public int getExpenseTypeId() {
+        return expenseTypeId;
     }
 
-    public void setExpense_type_id(int expense_type_id) {
-        this.expense_type_id = expense_type_id;
+    public void setExpenseTypeId(int expenseTypeId) {
+        this.expenseTypeId = expenseTypeId;
     }
 
-    public String getExpense_type_title() {
-        return expense_type_title;
+    public String getExpenseTypeTitle() {
+        return expenseTypeTitle;
     }
 
-    public void setExpense_type_title(String expense_type_title) {
-        this.expense_type_title = expense_type_title;
+    public void setExpenseTypeTitle(String expenseTypeTitle) {
+        this.expenseTypeTitle = expenseTypeTitle;
     }
 
     public static void initExpenseType(){
         expenseTypeList.clear();
-        if (expenseTypeList.isEmpty()){
-            expenseTypeList.add(new ExpenseType(1, "Income"));
-            expenseTypeList.add(new ExpenseType(1, "Outcome"));
-            expenseTypeList.add(new ExpenseType(1, "Loan / Debt"));
-        }
+
+        expenseTypeList.add(new ExpenseType(1, "Outcome"));
+        expenseTypeList.add(new ExpenseType(2, "Income"));
+        expenseTypeList.add(new ExpenseType(3, "Loan / Debt"));
     }
 
     public static ArrayList<ExpenseType> getExpenseTypeList(){

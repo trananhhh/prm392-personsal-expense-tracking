@@ -1,6 +1,7 @@
 package com.example.prm392_personalexpensetracking;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.example.prm392_personalexpensetracking.model.Category;
 import com.example.prm392_personalexpensetracking.model.Expense;
@@ -20,7 +21,10 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private FirebaseAuth mAuth;
     public static String intToMoneyFormat(int amount){
-        return String.format("%,d", amount) + " đ";
+
+        Log.d("Test", "intToMoneyFormat: " + amount);
+        return (String.format("%,d", amount) + " đ");
+//        return (amount + " đ");
     }
 
     @Override
@@ -39,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
         ExpenseType.initExpenseType();
         Category.initCategory();
-        Expense.initExpenseList();
+//        Expense.initExpenseList();
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(

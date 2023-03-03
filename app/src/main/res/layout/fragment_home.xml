@@ -11,22 +11,24 @@
 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
         android:layout_marginBottom="68dp"
         android:clickable="true"
-        android:contentDescription="Add new expense"
-        android:text="Add new"
+        android:contentDescription="@string/fab_add_new_des"
+        android:fontFamily="@font/inter"
+        android:textSize="12sp"
 
+        android:text="@string/fab_add_new"
         android:textAllCaps="false"
         android:textColor="@color/white"
         app:backgroundTint="@color/colorPrimary"
-        app:elevation="2dp"
 
+        app:elevation="2dp"
         app:icon="@drawable/ic_add_circle"
         app:iconTint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="VisualLintOverlap" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -53,7 +55,8 @@
                     android:id="@+id/currentMonth"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Feb, 2023"
+                    android:fontFamily="@font/inter_medium"
+                    android:text="@string/title_date_placeholder"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -66,20 +69,24 @@
                     android:layout_width="24dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="32dp"
+                    android:contentDescription="@string/back_button"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/prev_btn" />
+                    app:srcCompat="@drawable/prev_btn"
+                    tools:ignore="RedundantDescriptionCheck" />
 
                 <ImageView
                     android:id="@+id/next_btn"
                     android:layout_width="24dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="32dp"
+                    android:contentDescription="@string/next_button"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/next_btn" />
+                    app:srcCompat="@drawable/next_btn"
+                    tools:ignore="RedundantDescriptionCheck" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
 
@@ -97,7 +104,7 @@
                     android:id="@+id/expensesStatContainer"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginStart="32dp"
+                    android:layout_marginStart="12dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginBottom="16dp"
                     android:gravity="center"
@@ -112,23 +119,25 @@
                         android:layout_width="36dp"
                         android:layout_height="36dp"
                         android:layout_marginVertical="8dp"
-                        app:srcCompat="@drawable/ic_expenses" />
+                        app:srcCompat="@drawable/ic_expenses"
+                        android:contentDescription="@string/expense_logo"/>
 
                     <TextView
                         android:id="@+id/expenseStat"
-                        android:layout_width="match_parent"
+                        android:layout_width="110dp"
                         android:layout_height="wrap_content"
-                        android:text="0đ"
+                        android:fontFamily="@font/inter_medium"
+                        android:text="@string/money_placeholder"
                         android:textAlignment="center"
-                        android:textColor="@color/red_expense"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
+                        android:textColor="#D32F2F"
+                        android:textSize="13sp" />
 
                     <TextView
                         android:id="@+id/expenseLabel"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Expenses"
+                        android:fontFamily="@font/inter"
+                        android:text="@string/expenses"
                         android:textAlignment="center" />
                 </LinearLayout>
 
@@ -152,23 +161,25 @@
                         android:layout_width="36dp"
                         android:layout_height="36dp"
                         android:layout_marginVertical="8dp"
-                        app:srcCompat="@drawable/ic_balance" />
+                        app:srcCompat="@drawable/ic_balance"
+                        android:contentDescription="@string/balance_logo"/>
 
                     <TextView
                         android:id="@+id/balanceStat"
-                        android:layout_width="match_parent"
+                        android:layout_width="110dp"
                         android:layout_height="wrap_content"
-                        android:text="0đ"
+                        android:fontFamily="@font/inter_medium"
+                        android:text="@string/money_placeholder"
                         android:textAlignment="center"
                         android:textColor="@color/black"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
+                        android:textSize="13sp" />
 
                     <TextView
                         android:id="@+id/balanceLabel"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Balance"
+                        android:fontFamily="@font/inter"
+                        android:text="@string/balance"
                         android:textAlignment="center" />
                 </LinearLayout>
 
@@ -177,7 +188,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginTop="16dp"
-                    android:layout_marginEnd="32dp"
+                    android:layout_marginEnd="12dp"
                     android:layout_marginBottom="16dp"
                     android:gravity="center"
                     android:minWidth="80dp"
@@ -191,24 +202,26 @@
                         android:layout_width="36dp"
                         android:layout_height="36dp"
                         android:layout_marginVertical="8dp"
-                        app:srcCompat="@drawable/ic_income" />
+                        app:srcCompat="@drawable/ic_income"
+                        android:contentDescription="@string/income_logo"/>
 
 
                     <TextView
                         android:id="@+id/incomeStat"
-                        android:layout_width="match_parent"
+                        android:layout_width="110dp"
                         android:layout_height="wrap_content"
-                        android:text="0đ"
+                        android:fontFamily="@font/inter_medium"
+                        android:text="@string/money_placeholder"
                         android:textAlignment="center"
-                        android:textColor="@color/green_income"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
+                        android:textColor="#00796B"
+                        android:textSize="13sp" />
 
                     <TextView
                         android:id="@+id/incomeLabel"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Income"
+                        android:fontFamily="@font/inter"
+                        android:text="@string/income"
                         android:textAlignment="center" />
                 </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -223,7 +236,7 @@
                 android:id="@+id/expensesRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingBottom="128dp"/>
+                android:paddingBottom="128dp" />
 
         </androidx.core.widget.NestedScrollView>
 

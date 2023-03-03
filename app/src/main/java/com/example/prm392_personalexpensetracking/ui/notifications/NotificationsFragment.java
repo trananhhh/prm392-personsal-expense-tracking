@@ -6,13 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
-import com.example.prm392_personalexpensetracking.AddExpenseActivity;
 import com.example.prm392_personalexpensetracking.LoginActivity;
 import com.example.prm392_personalexpensetracking.databinding.FragmentNotificationsBinding;
 import com.google.firebase.auth.FirebaseAuth;

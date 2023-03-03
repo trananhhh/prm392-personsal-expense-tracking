@@ -19,10 +19,22 @@
     <string name="add_expense_custom_chip">Custom</string>
     <string name="add_expense_save_btn">Save</string>
     <string name="title_activity_main2">MainActivity2</string>
-
-    <string-array name="expense_type">
-        <item>Income</item>
-        <item>Outcome</item>
-        <item>Loan / Debt</item>
-    </string-array>
+    <string name="fab_add_new">Add new</string>
+    <string name="fab_add_new_des">Add new expense</string>
+    <string name="title_date_placeholder">Feb, 2023</string>
+    <string name="back_button">Back button</string>
+    <string name="next_button">Next button</string>
+    <string name="expense_logo">Expenses logo</string>
+    <string name="money_placeholder">0đ</string>
+    <string name="expenses">Expenses</string>
+    <string name="balance_logo">Balance logo</string>
+    <string name="balance">Balance</string>
+    <string name="income_logo">Income logo</string>
+    <string name="income">Income</string>
+    <string name="addExpenseTitle">Add new expense</string>
+    <string name="delete">Delete</string>
+    <string name="transaction_category_icon">Transaction category icon</string>
+    <string name="dashboardExpenseItemTitlePlaceholder">Shopping</string>
+    <string name="dashboardExpenseItemDesPlaceholder">soap, milk</string>
+    <string name="dashboardExpenseItemPricePlaceholder">58,000 đ</string>
 </resources>

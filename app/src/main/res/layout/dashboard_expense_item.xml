@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/linearLayout6"
+    android:id="@+id/dashboard_expense_item"
     android:layout_width="match_parent"
     android:layout_height="56dp"
     android:layout_marginHorizontal="24dp"
@@ -11,17 +11,18 @@
 
     <ImageView
         android:id="@+id/expenseCatIcon"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/groceries" />
+        app:srcCompat="@drawable/groceries"
+        android:contentDescription="@string/transaction_category_icon"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="16dp"
         android:gravity="center"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -32,25 +33,26 @@
             android:id="@+id/expenseCatTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Shopping"
-            android:textStyle="bold"
-            />
+            android:fontFamily="@font/inter_medium"
+            android:text="@string/dashboardExpenseItemTitlePlaceholder"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/expenseDes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="soap, milk" />
+            android:fontFamily="@font/inter"
+            android:text="@string/dashboardExpenseItemDesPlaceholder" />
     </LinearLayout>
 
     <TextView
         android:id="@+id/expensePrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="58,000 đ"
+        android:fontFamily="@font/inter_medium"
+        android:text="@string/dashboardExpenseItemPricePlaceholder"
         android:textAlignment="viewEnd"
         android:textSize="14sp"
-        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

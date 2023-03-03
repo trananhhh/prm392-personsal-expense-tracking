@@ -2,7 +2,6 @@ package com.example.prm392_personalexpensetracking.ui.home;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.prm392_personalexpensetracking.AddExpenseActivity;
+import com.example.prm392_personalexpensetracking.ExpenseActivity;
 import com.example.prm392_personalexpensetracking.MainActivity;
 import com.example.prm392_personalexpensetracking.adapter.ExpensesDayAdapter;
 import com.example.prm392_personalexpensetracking.databinding.FragmentHomeBinding;
@@ -58,9 +57,9 @@ public class HomeFragment extends Fragment {
         expenseArrayList.forEach((item) -> {
             int catType = Category.getCategoryById(item.getCateId()).getType();
             if(catType == 1)
-                totalIncome += item.getAmount();
-            if(catType == 2)
                 totalExpenses += item.getAmount();
+            if(catType == 2)
+                totalIncome += item.getAmount();
         });
 
         currentBalance = totalIncome - totalExpenses;
@@ -85,24 +84,28 @@ public class HomeFragment extends Fragment {
         fAuth = FirebaseAuth.getInstance();
         expenseArrayList = new ArrayList<>();
 
-        if(fAuth.getCurrentUser() != null)
-            loadData(binding);
-
         addExpenseFab = binding.addExpenseFab;
         addExpenseFab.setOnClickListener(view -> {
-            Intent intent = new Intent(getActivity(), AddExpenseActivity.class);
+            Intent intent = new Intent(getActivity(), ExpenseActivity.class);
             startActivity(intent);
         });
 
-        Log.d("HomeFragment", "onCreateView");
-
         return root;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if(fAuth.getCurrentUser() != null)
+            loadData(binding);
     }
 
     private void loadData(FragmentHomeBinding binding){
         fStore.collection("Data").document(fAuth.getUid()).collection("Expenses").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                expenseArrayList.clear();
+
                 for(DocumentSnapshot ds:task.getResult()){
                     Expense expense = new Expense(
                             ds.getString("expenseId"),
