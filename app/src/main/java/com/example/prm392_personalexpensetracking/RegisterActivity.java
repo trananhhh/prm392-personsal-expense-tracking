@@ -78,13 +78,10 @@ public class RegisterActivity extends AppCompatActivity {
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
                             Toast.makeText(RegisterActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
-                            updateUI(null);
                         }
                     }
                 });
         }
     }
 
-
-    private void updateUI(FirebaseUser user) {}
 }

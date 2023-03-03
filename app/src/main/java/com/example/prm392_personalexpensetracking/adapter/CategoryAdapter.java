@@ -13,7 +13,6 @@ import androidx.annotation.Nullable;
 
 import com.example.prm392_personalexpensetracking.R;
 import com.example.prm392_personalexpensetracking.model.Category;
-import com.example.prm392_personalexpensetracking.model.ExpenseType;
 
 import java.util.List;
 
@@ -32,7 +31,7 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
         Category category = getItem(position);
 
         TextView categorySpinnerTitle = rowView.findViewById(R.id.categorySpinnerTitle);
-        categorySpinnerTitle.setText(category.getCate_name());
+        categorySpinnerTitle.setText(category.getCateName());
 
         ImageView categorySpinnerIcon = rowView.findViewById(R.id.categorySpinnerIcon);
         categorySpinnerIcon.setImageResource(category.getImage());
@@ -48,7 +47,7 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
         Category category = getItem(position);
 
         TextView categorySpinnerTitle = convertView.findViewById(R.id.categorySpinnerTitle);
-        categorySpinnerTitle.setText(category.getCate_name());
+        categorySpinnerTitle.setText(category.getCateName());
 
         ImageView categorySpinnerIcon = convertView.findViewById(R.id.categorySpinnerIcon);
         categorySpinnerIcon.setImageResource(category.getImage());

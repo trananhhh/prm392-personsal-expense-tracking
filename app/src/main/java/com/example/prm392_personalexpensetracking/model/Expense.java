@@ -8,8 +8,8 @@ import java.util.Date;
 
 public class Expense {
     public static ArrayList<Expense> expensesList = new ArrayList<>();
-    private String expense_id;
-    private int cate_id;
+    private String expenseId;
+    private int cateId;
     private String description;
     private int amount;
 
@@ -18,28 +18,28 @@ public class Expense {
     public Expense() {
     }
 
-    public Expense(String expense_id, int cate_id, String description, int amount, Date createAt) {
-        this.expense_id = expense_id;
-        this.cate_id = cate_id;
+    public Expense(String expense_id, int cateId, String description, int amount, Date createAt) {
+        this.expenseId = expense_id;
+        this.cateId = cateId;
         this.description = description;
         this.amount = amount;
         this.createAt = createAt;
     }
 
-    public String getExpense_id() {
-        return expense_id;
+    public String getExpenseId() {
+        return expenseId;
     }
 
-    public void setExpense_id(String expense_id) {
-        this.expense_id = expense_id;
+    public void setExpenseId(String expenseId) {
+        this.expenseId = expenseId;
     }
 
-    public int getCate_id() {
-        return cate_id;
+    public int getCateId() {
+        return cateId;
     }
 
-    public void setCate_id(int cate_id) {
-        this.cate_id = cate_id;
+    public void setCateId(int cateId) {
+        this.cateId = cateId;
     }
 
     public String getDescription() {

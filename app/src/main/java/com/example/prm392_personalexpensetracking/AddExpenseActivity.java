@@ -1,28 +1,32 @@
 package com.example.prm392_personalexpensetracking;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
+import android.widget.Toast;
 
 import com.example.prm392_personalexpensetracking.adapter.CategoryAdapter;
 import com.example.prm392_personalexpensetracking.adapter.ExpenseTypeAdapter;
 import com.example.prm392_personalexpensetracking.model.Category;
-import com.example.prm392_personalexpensetracking.model.Expense;
 import com.example.prm392_personalexpensetracking.model.ExpenseType;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.MessageFormat;
 import java.util.Calendar;
-import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public class AddExpenseActivity extends AppCompatActivity {
@@ -31,6 +35,9 @@ public class AddExpenseActivity extends AppCompatActivity {
     int day, month, year;
     Spinner expenseTypeSpinner, categorySpinner;
     TextInputEditText amount, description;
+    FirebaseFirestore fStore;
+    FirebaseAuth fAuth;
+    FirebaseUser fUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,10 +49,22 @@ public class AddExpenseActivity extends AppCompatActivity {
         actionBar.setTitle("Add new expense");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+//        Firebase
+        fStore = FirebaseFirestore.getInstance();
+        fAuth = FirebaseAuth.getInstance();
+        fUser = fAuth.getCurrentUser();
+
         amount = findViewById(R.id.textAddExpenseAmount);
         description = findViewById(R.id.textAddExpenseDescription);
 
-//      Spinner setup
+        spinnerSetup();
+        datePickerSetup();
+        saveBtnSetup();
+
+
+    }
+
+    private void spinnerSetup(){
         expenseTypeSpinner = findViewById(R.id.expenseTypeSpinner);
         ExpenseTypeAdapter expenseTypeAdapter = new ExpenseTypeAdapter(this, R.layout.expense_type_spinner_adapter, ExpenseType.getExpenseTypeList());
         expenseTypeSpinner.setAdapter(expenseTypeAdapter);
@@ -53,8 +72,9 @@ public class AddExpenseActivity extends AppCompatActivity {
         categorySpinner = findViewById(R.id.categorySpinner);
         CategoryAdapter categoryAdapter = new CategoryAdapter(this, R.layout.category_spinner_adapter, Category.getCategoryList());
         categorySpinner.setAdapter(categoryAdapter);
+    }
 
-//      DatePicker setup
+    private void datePickerSetup(){
         year = cal.get(Calendar.YEAR);
         month = cal.get(Calendar.MONTH);
         day = cal.get(Calendar.DAY_OF_MONTH);
@@ -64,8 +84,9 @@ public class AddExpenseActivity extends AppCompatActivity {
         dateButton.setOnClickListener(view -> {
             showDatePickerDialog(day, month, year);
         });
+    }
 
-//      SaveBtn
+    private void saveBtnSetup(){
         Button saveBtn = findViewById(R.id.saveExpenseBtn);
         saveBtn.setOnClickListener(view -> {
             saveExpenseHandled();
@@ -73,31 +94,37 @@ public class AddExpenseActivity extends AppCompatActivity {
     }
 
     private void saveExpenseHandled(){
-        ExpenseType currentExpenseType = ExpenseType.getExpenseTypeList().get(expenseTypeSpinner.getSelectedItemPosition());
+//        ExpenseType currentExpenseType = ExpenseType.getExpenseTypeList().get(expenseTypeSpinner.getSelectedItemPosition());
         Category currentCategory = Category.getCategoryList().get(categorySpinner.getSelectedItemPosition());
 
         if(amount.getText().length() == 0){
             showErrorAmountRequiredAlert();
             return;
         }
-
-//        expensesList.add(new Expense(1, 6, "CMC Global tháng 2", 15000000, new Date()));
-
-//        String date_string = "26-09-1989";
-//        //Instantiating the SimpleDateFormat class
-//        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-//        //Parsing the given String to Date object
-//        Date date = formatter.parse(date_string);
         Calendar c = Calendar.getInstance();
-        c.set(year, month-1, day);
+        c.set(year, month, day);
 
-        Expense.addExpense(new Expense(
-                UUID.randomUUID().toString(),
-                currentCategory.getCate_id(),
-                description.getText().toString(),
-                Integer.parseInt(amount.getText().toString()),
-                c.getTime()
-        ));
+        String id = UUID.randomUUID().toString();
+        Map<String, Object> transaction = new HashMap<>();
+        transaction.put("expenseId", id);
+        transaction.put("cateId", currentCategory.getCateId());
+        transaction.put("description", description.getText().toString());
+        transaction.put("amount", Integer.parseInt(amount.getText().toString()));
+        transaction.put("createAt", c.getTime());
+
+        fStore.collection("Data").document(fAuth.getUid()).collection("Expenses").document(id).set(transaction).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                Toast.makeText(AddExpenseActivity.this, "Added", Toast.LENGTH_SHORT).show();
+                description.setText("");
+                amount.setText("");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(AddExpenseActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
 
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);

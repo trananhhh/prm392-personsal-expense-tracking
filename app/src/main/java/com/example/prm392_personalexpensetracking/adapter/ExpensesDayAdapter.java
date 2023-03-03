@@ -39,9 +39,9 @@ public class ExpensesDayAdapter extends RecyclerView.Adapter<ExpensesDayAdapter.
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Expense expense = expenseList.get(position);
-        Category category = Category.getCategoryById(expense.getCate_id());
+        Category category = Category.getCategoryById(expense.getCateId());
 
-        holder.catTitle.setText(category.getCate_name());
+        holder.catTitle.setText(category.getCateName());
         holder.description.setText(expense.getCreateAt().toString());
         holder.price.setText(MainActivity.intToMoneyFormat(expense.getAmount()));
         holder.catIcon.setImageResource(category.getImage());

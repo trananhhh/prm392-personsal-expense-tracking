@@ -6,10 +6,10 @@ import java.util.ArrayList;
 
 public class Category {
     public static ArrayList<Category> categoriesList = new ArrayList<>();
-    private int cate_id;
-    private String cate_name;
-    private int parent_cate_id;
-    private String icon_name;
+    private int cateId;
+    private String cateName;
+    private int parentCateId;
+    private String iconName;
     private int type;
     /*
         1. Income
@@ -21,49 +21,49 @@ public class Category {
         initCategory();
     }
 
-    public Category(String cate_name) {
-        this.cate_name = cate_name;
+    public Category(String cateName) {
+        this.cateName = cateName;
     }
 
-    public Category(int cate_id, String cate_name, int parent_cate_id, int type) {
-        this.cate_id = cate_id;
-        this.cate_name = cate_name;
-        this.parent_cate_id = parent_cate_id;
+    public Category(int cateId, String cateName, int parentCateId, int type) {
+        this.cateId = cateId;
+        this.cateName = cateName;
+        this.parentCateId = parentCateId;
         this.type = type;;
-        this.icon_name = icon_name;
+        this.iconName = iconName;
 //        this.child_cate = child_cate;
     }
 
-    public int getCate_id() {
-        return cate_id;
+    public int getCateId() {
+        return cateId;
     }
 
-    public void setCate_id(int cate_id) {
-        this.cate_id = cate_id;
+    public void setCateId(int cateId) {
+        this.cateId = cateId;
     }
 
-    public String getCate_name() {
-        return cate_name;
+    public String getCateName() {
+        return cateName;
     }
 
-    public void setCate_name(String cate_name) {
-        this.cate_name = cate_name;
+    public void setCateName(String cateName) {
+        this.cateName = cateName;
     }
 
-    public int getParent_cate_id() {
-        return parent_cate_id;
+    public int getParentCateId() {
+        return parentCateId;
     }
 
-    public void setParent_cate_id(int parent_cate_id) {
-        this.parent_cate_id = parent_cate_id;
+    public void setParentCateId(int parentCateId) {
+        this.parentCateId = parentCateId;
     }
 
-    public String getIcon_name() {
-        return icon_name;
+    public String getIconName() {
+        return iconName;
     }
 
-    public void setIcon_name(String icon_name) {
-        this.icon_name = icon_name;
+    public void setIconName(String iconName) {
+        this.iconName = iconName;
     }
 
     public int getType() {
@@ -75,7 +75,7 @@ public class Category {
     }
 
     public static Category getCategoryById(int id){
-        return categoriesList.stream().filter((item) -> item.getCate_id() == id).findFirst().get();
+        return categoriesList.stream().filter((item) -> item.getCateId() == id).findFirst().get();
     }
 
     public static void initCategory(){
@@ -103,7 +103,7 @@ public class Category {
     }
 
     public int getImage(){
-        switch (getCate_id()){
+        switch (getCateId()){
             case 1:
                 return R.drawable.groceries;
             case 2:
