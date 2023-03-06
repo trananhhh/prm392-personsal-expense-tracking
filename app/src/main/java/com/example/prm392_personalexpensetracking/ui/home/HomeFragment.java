@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,7 +29,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
@@ -37,11 +40,11 @@ public class HomeFragment extends Fragment {
     private int totalExpenses = 0;
     private int currentBalance = 0;
     private int totalIncome = 0;
-    private TextView expenseStat;
-    private TextView balanceStat;
-    private TextView incomeStat;
+    private TextView expenseStat, balanceStat, incomeStat, monthTitle;
+    private ImageView prevMonthBtn, nextMonthBtn;
     private ExtendedFloatingActionButton addExpenseFab;
     private ArrayList<Expense> expenseArrayList;
+    private Calendar currentMonth;
 
     FirebaseFirestore fStore;
     FirebaseAuth fAuth;
@@ -84,6 +87,26 @@ public class HomeFragment extends Fragment {
         fAuth = FirebaseAuth.getInstance();
         expenseArrayList = new ArrayList<>();
 
+        currentMonth = Calendar.getInstance();
+
+        monthTitle = binding.monthTitle;
+        monthTitle.setText(getMonthTitle(currentMonth));
+
+        prevMonthBtn = binding.prevMonthBtn;
+        nextMonthBtn = binding.nextMonthBtn;
+
+        prevMonthBtn.setOnClickListener(view -> {
+            currentMonth.add(Calendar.MONTH, -1);
+            monthTitle.setText(getMonthTitle(currentMonth));
+            loadData(binding);
+        });
+
+        nextMonthBtn.setOnClickListener(view -> {
+            currentMonth.add(Calendar.MONTH, 1);
+            monthTitle.setText(getMonthTitle(currentMonth));
+            loadData(binding);
+        });
+
         addExpenseFab = binding.addExpenseFab;
         addExpenseFab.setOnClickListener(view -> {
             Intent intent = new Intent(getActivity(), ExpenseActivity.class);
@@ -91,6 +114,10 @@ public class HomeFragment extends Fragment {
         });
 
         return root;
+    }
+
+    public String getMonthTitle(Calendar cur){
+        return new SimpleDateFormat("MMM, yyyy").format(cur.getTime());
     }
 
     @Override
@@ -101,20 +128,23 @@ public class HomeFragment extends Fragment {
     }
 
     private void loadData(FragmentHomeBinding binding){
+        Calendar tmpCal = Calendar.getInstance();
         fStore.collection("Data").document(fAuth.getUid()).collection("Expenses").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 expenseArrayList.clear();
-
                 for(DocumentSnapshot ds:task.getResult()){
-                    Expense expense = new Expense(
-                            ds.getString("expenseId"),
-                            Math.toIntExact(ds.getLong("cateId")),
-                            ds.getString("description"),
-                            Math.toIntExact(ds.getLong("amount")),
-                            ds.getDate("createAt")
-                    );
-                    expenseArrayList.add(expense);
+                    tmpCal.setTime(ds.getDate("createAt"));
+                    if (tmpCal.get(Calendar.YEAR) == currentMonth.get(Calendar.YEAR) && tmpCal.get(Calendar.MONTH) == currentMonth.get(Calendar.MONTH)){
+                        Expense expense = new Expense(
+                                ds.getString("expenseId"),
+                                Math.toIntExact(ds.getLong("cateId")),
+                                ds.getString("description"),
+                                Math.toIntExact(ds.getLong("amount")),
+                                ds.getDate("createAt")
+                        );
+                        expenseArrayList.add(expense);
+                    }
                 };
                 expenseArrayList.sort((Expense ex1, Expense ex2) -> ex2.getCreateAt().compareTo(ex1.getCreateAt()));
                 setStats(binding);

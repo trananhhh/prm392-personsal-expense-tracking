@@ -61,6 +61,7 @@ public class ExpenseActivity extends AppCompatActivity {
         amount = findViewById(R.id.textAddExpenseAmount);
         description = findViewById(R.id.textAddExpenseDescription);
 
+        clear();
 
         int catType = 1;
         Category cat = null;
@@ -215,6 +216,10 @@ public class ExpenseActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        clear();
+    }
+
+    private void clear(){
         amount.setText("");
         description.setText("");
         cal = Calendar.getInstance();
