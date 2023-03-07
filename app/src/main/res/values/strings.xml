@@ -13,7 +13,7 @@
     <string name="title_notifications">Notifications</string>
     <string name="add_expense_amount_placeholder">Enter amount</string>
     <string name="add_expense_description_placeholder">Description (Optional)</string>
-    <string name="add_expense_date_placeholder">15 Feb 2023</string>
+    <string name="add_expense_date_placeholder">01 Jan 1999</string>
     <string name="add_expense_today_chip">Today</string>
     <string name="add_expense_yesterday_chip">Yesterday</string>
     <string name="add_expense_custom_chip">Custom</string>
@@ -21,11 +21,11 @@
     <string name="title_activity_main2">MainActivity2</string>
     <string name="fab_add_new">Add new</string>
     <string name="fab_add_new_des">Add new expense</string>
-    <string name="title_date_placeholder">Feb, 2023</string>
+    <string name="title_date_placeholder">Jan, 1999</string>
     <string name="back_button">Back button</string>
     <string name="next_button">Next button</string>
     <string name="expense_logo">Expenses logo</string>
-    <string name="money_placeholder">0đ</string>
+    <string name="money_placeholder">0 đ</string>
     <string name="expenses">Expenses</string>
     <string name="balance_logo">Balance logo</string>
     <string name="balance">Balance</string>
@@ -36,5 +36,7 @@
     <string name="transaction_category_icon">Transaction category icon</string>
     <string name="dashboardExpenseItemTitlePlaceholder">Shopping</string>
     <string name="dashboardExpenseItemDesPlaceholder">soap, milk</string>
-    <string name="dashboardExpenseItemPricePlaceholder">58,000 đ</string>
+    <string name="dashboardExpenseItemPricePlaceholder">0 đ</string>
+    <string name="applogo">appLogo</string>
+    <string name="pricePlaceholder">0 đ</string>
 </resources>
