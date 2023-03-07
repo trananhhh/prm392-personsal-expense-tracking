@@ -3,6 +3,7 @@ package com.example.prm392_personalexpensetracking.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,12 +21,16 @@ import com.example.prm392_personalexpensetracking.R;
 import com.example.prm392_personalexpensetracking.model.Category;
 import com.example.prm392_personalexpensetracking.model.Expense;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class ExpensesDayAdapter extends RecyclerView.Adapter<ExpensesDayAdapter.ViewHolder> {
 
     private final ArrayList<Expense> expenseList;
     private Context context;
+    private Calendar calendar;
 
     public ExpensesDayAdapter(ArrayList<Expense> expenseList, Context context) {
         this.expenseList = expenseList;
@@ -36,6 +41,7 @@ public class ExpensesDayAdapter extends RecyclerView.Adapter<ExpensesDayAdapter.
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater mInflater = LayoutInflater.from(context);
+        calendar = Calendar.getInstance();
         View mExpensesItemView = mInflater.inflate(R.layout.dashboard_expense_item, parent, false);
         return new ViewHolder(mExpensesItemView, this);
     }
@@ -49,6 +55,7 @@ public class ExpensesDayAdapter extends RecyclerView.Adapter<ExpensesDayAdapter.
         holder.description.setText(expense.getDescription());
         holder.price.setText(MainActivity.intToMoneyFormat(expense.getAmount()));
         holder.catIcon.setImageResource(category.getImage());
+        holder.expenseDate.setText(getDayMonthText(expense.getCreateAt()));
 
         if(category.getType() == 2){
             holder.price.setTextColor(ContextCompat.getColor(context, R.color.green_income));
@@ -66,6 +73,10 @@ public class ExpensesDayAdapter extends RecyclerView.Adapter<ExpensesDayAdapter.
         });
     }
 
+    public String getDayMonthText(Date date){
+        calendar.setTime(date);
+        return new SimpleDateFormat("dd MMM").format(calendar.getTime());
+    }
     @Override
     public int getItemCount() {
         return expenseList.size();
@@ -75,9 +86,7 @@ public class ExpensesDayAdapter extends RecyclerView.Adapter<ExpensesDayAdapter.
         final ExpensesDayAdapter mAdapter;
         private ConstraintLayout dashboardExpenseItem;
         private ImageView catIcon;
-        private TextView catTitle;
-        private TextView description;
-        private TextView price;
+        private TextView catTitle, description, price, expenseDate;
 
         public ViewHolder(@NonNull View itemView, ExpensesDayAdapter expensesDayAdapter) {
             super(itemView);
@@ -87,6 +96,7 @@ public class ExpensesDayAdapter extends RecyclerView.Adapter<ExpensesDayAdapter.
             catTitle = itemView.findViewById(R.id.expenseCatTitle);
             description = itemView.findViewById(R.id.expenseDes);
             price = itemView.findViewById(R.id.expensePrice);
+            expenseDate = itemView.findViewById(R.id.expenseDate);
         }
     }
 }

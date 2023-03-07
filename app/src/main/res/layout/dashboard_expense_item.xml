@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/dashboard_expense_item"
     android:layout_width="match_parent"
     android:layout_height="56dp"
@@ -45,17 +46,31 @@
             android:text="@string/dashboardExpenseItemDesPlaceholder" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/expensePrice"
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/inter_medium"
-        android:text="@string/dashboardExpenseItemPricePlaceholder"
-        android:textAlignment="viewEnd"
-        android:textSize="14sp"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/expenseDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="3 Mar"
+            android:textAlignment="viewEnd" />
+
+        <TextView
+            android:id="@+id/expensePrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/inter_medium"
+            android:text="@string/dashboardExpenseItemPricePlaceholder"
+            android:textAlignment="viewEnd"
+            android:textSize="14sp" />
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

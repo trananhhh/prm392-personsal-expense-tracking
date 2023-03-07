@@ -40,7 +40,8 @@ public class HomeFragment extends Fragment {
     private int totalExpenses = 0;
     private int currentBalance = 0;
     private int totalIncome = 0;
-    private TextView expenseStat, balanceStat, incomeStat, monthTitle;
+    private int totalBalance = 0;
+    private TextView expenseStat, balanceStat, incomeStat, monthTitle, balanceHeaderStat;
     private ImageView prevMonthBtn, nextMonthBtn;
     private ExtendedFloatingActionButton addExpenseFab;
     private ArrayList<Expense> expenseArrayList;
@@ -56,6 +57,7 @@ public class HomeFragment extends Fragment {
         expenseStat = binding.expenseStat;
         balanceStat = binding.balanceStat;
         incomeStat = binding.incomeStat;
+        balanceHeaderStat = binding.balanceHeaderStat;
 
         expenseArrayList.forEach((item) -> {
             int catType = Category.getCategoryById(item.getCateId()).getType();
@@ -70,6 +72,7 @@ public class HomeFragment extends Fragment {
         expenseStat.setText( MainActivity.intToMoneyFormat(totalExpenses));
         balanceStat.setText( MainActivity.intToMoneyFormat(currentBalance));
         incomeStat.setText( MainActivity.intToMoneyFormat(totalIncome));
+        balanceHeaderStat.setText( MainActivity.intToMoneyFormat(totalBalance));
     }
 
     private void bindingRecyclerView(FragmentHomeBinding binding){
@@ -129,11 +132,13 @@ public class HomeFragment extends Fragment {
 
     private void loadData(FragmentHomeBinding binding){
         Calendar tmpCal = Calendar.getInstance();
+        totalBalance = 0;
         fStore.collection("Data").document(fAuth.getUid()).collection("Expenses").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 expenseArrayList.clear();
                 for(DocumentSnapshot ds:task.getResult()){
+                    totalBalance += Math.toIntExact(ds.getLong("amount")) * (Category.getCategoryById(Math.toIntExact(ds.getLong("cateId"))).getType() == 1 ? -1 : 1);
                     tmpCal.setTime(ds.getDate("createAt"));
                     if (tmpCal.get(Calendar.YEAR) == currentMonth.get(Calendar.YEAR) && tmpCal.get(Calendar.MONTH) == currentMonth.get(Calendar.MONTH)){
                         Expense expense = new Expense(
