@@ -1,6 +1,5 @@
-package com.example.prm392_personalexpensetracking.ui.home;
+package com.example.prm392_personalexpensetracking.ui.report;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,82 +10,49 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.prm392_personalexpensetracking.ExpenseActivity;
 import com.example.prm392_personalexpensetracking.MainActivity;
 import com.example.prm392_personalexpensetracking.adapter.ExpensesDayAdapter;
+import com.example.prm392_personalexpensetracking.adapter.ExpensesReportAdapter;
 import com.example.prm392_personalexpensetracking.databinding.FragmentHomeBinding;
+import com.example.prm392_personalexpensetracking.databinding.FragmentReportBinding;
 import com.example.prm392_personalexpensetracking.model.Category;
 import com.example.prm392_personalexpensetracking.model.Expense;
+import com.example.prm392_personalexpensetracking.ui.home.HomeFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
-public class HomeFragment extends Fragment {
-    private FragmentHomeBinding binding;
+public class ReportFragment extends Fragment {
+    private FragmentReportBinding binding;
     private RecyclerView mRecyclerView;
-    private ExpensesDayAdapter mExpenseAdapter ;
-    private int totalExpenses = 0, currentBalance = 0, totalIncome = 0;
-    public int totalBalance = 0;
-    private TextView expenseStat, balanceStat, incomeStat, monthTitle, balanceHeaderStat;
-    private ImageView prevMonthBtn, nextMonthBtn, reloadBtn;
-    private ExtendedFloatingActionButton addExpenseFab;
-    private ArrayList<Expense> expenseArrayList;
+    private ExpensesReportAdapter mExpenseAdapter;
+    private ImageView prevMonthBtn, nextMonthBtn;
+    private TextView expenseStat, balanceStat, incomeStat, monthTitle;
     private Calendar currentMonth;
-
+    private int totalExpenses = 0, currentBalance = 0, totalIncome = 0;
     FirebaseFirestore fStore;
     FirebaseAuth fAuth;
-
-    private void setStats(FragmentHomeBinding binding){
-        totalExpenses = 0;
-        totalIncome = 0;
-
-        expenseStat = binding.expenseStat;
-        balanceStat = binding.balanceStat;
-        incomeStat = binding.incomeStat;
-        balanceHeaderStat = binding.balanceHeaderStat;
-
-        expenseArrayList.forEach((item) -> {
-            int catType = Category.getCategoryById(item.getCateId()).getType();
-            if(catType == 1)
-                totalExpenses += item.getAmount();
-            if(catType == 2)
-                totalIncome += item.getAmount();
-        });
-
-        currentBalance = totalIncome - totalExpenses;
-
-        expenseStat.setText( MainActivity.intToMoneyFormat(totalExpenses));
-        balanceStat.setText( MainActivity.intToMoneyFormat(currentBalance));
-        incomeStat.setText( MainActivity.intToMoneyFormat(totalIncome));
-        balanceHeaderStat.setText( MainActivity.intToMoneyFormat(totalBalance));
-    }
-
-    private void bindingRecyclerView(FragmentHomeBinding binding){
-        mRecyclerView = binding.expensesRecyclerView;
-        mExpenseAdapter = new ExpensesDayAdapter(expenseArrayList, getContext());
-        mRecyclerView.setAdapter(mExpenseAdapter);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-    }
+    private ArrayList<Expense> expenseArrayList = new ArrayList<>();
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = FragmentHomeBinding.inflate(inflater, container, false);
+        binding = FragmentReportBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
         fStore = FirebaseFirestore.getInstance();
         fAuth = FirebaseAuth.getInstance();
-        expenseArrayList = new ArrayList<>();
 
         currentMonth = Calendar.getInstance();
 
@@ -108,34 +74,22 @@ public class HomeFragment extends Fragment {
             loadData(binding);
         });
 
-        addExpenseFab = binding.addExpenseFab;
-        addExpenseFab.setOnClickListener(view -> {
-            Intent intent = new Intent(getActivity(), ExpenseActivity.class);
-            startActivity(intent);
-        });
-
-        if(fAuth.getCurrentUser() != null)
-            loadData(binding);
-
-        reloadBtn = binding.reloadBtn;
-        reloadBtn.setOnClickListener(view -> loadData(binding));
-
         return root;
     }
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
 
-    private void loadData(FragmentHomeBinding binding){
+    private void bindingRecyclerView(FragmentReportBinding binding){
+        mRecyclerView = binding.categoriesRecyclerView;
+        mExpenseAdapter = new ExpensesReportAdapter(expenseArrayList, getContext());
+        mRecyclerView.setAdapter(mExpenseAdapter);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+    }
+    private void loadData(FragmentReportBinding binding){
         Calendar tmpCal = Calendar.getInstance();
-        totalBalance = 0;
         fStore.collection("Data").document(fAuth.getUid()).collection("Expenses").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 expenseArrayList.clear();
                 for(DocumentSnapshot ds:task.getResult()){
-                    totalBalance += Math.toIntExact(ds.getLong("amount")) * (Category.getCategoryById(Math.toIntExact(ds.getLong("cateId"))).getType() == 1 ? -1 : 1);
                     tmpCal.setTime(ds.getDate("createAt"));
                     if (tmpCal.get(Calendar.YEAR) == currentMonth.get(Calendar.YEAR) && tmpCal.get(Calendar.MONTH) == currentMonth.get(Calendar.MONTH)){
                         Expense expense = new Expense(
@@ -158,6 +112,29 @@ public class HomeFragment extends Fragment {
                 Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void setStats(FragmentReportBinding binding){
+        totalExpenses = 0;
+        totalIncome = 0;
+
+//        expenseStat = binding.expenseStat;
+//        balanceStat = binding.balanceStat;
+//        incomeStat = binding.incomeStat;
+
+        expenseArrayList.forEach((item) -> {
+            int catType = Category.getCategoryById(item.getCateId()).getType();
+            if(catType == 1)
+                totalExpenses += item.getAmount();
+            if(catType == 2)
+                totalIncome += item.getAmount();
+        });
+
+        currentBalance = totalIncome - totalExpenses;
+
+//        expenseStat.setText( MainActivity.intToMoneyFormat(totalExpenses));
+//        balanceStat.setText( MainActivity.intToMoneyFormat(currentBalance));
+//        incomeStat.setText( MainActivity.intToMoneyFormat(totalIncome));
     }
 
     @Override
