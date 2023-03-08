@@ -42,7 +42,7 @@ public class HomeFragment extends Fragment {
     private int totalIncome = 0;
     private int totalBalance = 0;
     private TextView expenseStat, balanceStat, incomeStat, monthTitle, balanceHeaderStat;
-    private ImageView prevMonthBtn, nextMonthBtn;
+    private ImageView prevMonthBtn, nextMonthBtn, reloadBtn;
     private ExtendedFloatingActionButton addExpenseFab;
     private ArrayList<Expense> expenseArrayList;
     private Calendar currentMonth;
@@ -116,6 +116,12 @@ public class HomeFragment extends Fragment {
             startActivity(intent);
         });
 
+        if(fAuth.getCurrentUser() != null)
+            loadData(binding);
+
+        reloadBtn = binding.reloadBtn;
+        reloadBtn.setOnClickListener(view -> loadData(binding));
+
         return root;
     }
 
@@ -126,8 +132,6 @@ public class HomeFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        if(fAuth.getCurrentUser() != null)
-            loadData(binding);
     }
 
     private void loadData(FragmentHomeBinding binding){

@@ -39,4 +39,5 @@
     <string name="dashboardExpenseItemPricePlaceholder">0 đ</string>
     <string name="applogo">appLogo</string>
     <string name="pricePlaceholder">0 đ</string>
+    <string name="todo">TODO</string>
 </resources>

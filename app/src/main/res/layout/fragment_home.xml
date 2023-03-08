@@ -38,11 +38,14 @@
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
 
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/linearLayout3"
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:layout_marginTop="12dp"
@@ -50,56 +53,71 @@
             android:paddingHorizontal="12dp"
             tools:ignore="TextSizeCheck">
 
-            <LinearLayout
+
+            <ImageView
+                android:id="@+id/appLogo"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:orientation="horizontal"
-                tools:ignore="UselessParent">
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/applogo"
+                android:padding="4dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/money_lover_logo"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="InefficientWeight,ImageContrastCheck" />
 
-                <ImageView
-                    android:id="@+id/appLogo"
-                    android:layout_width="42dp"
-                    android:layout_height="42dp"
-                    android:layout_weight="1"
-                    android:contentDescription="@string/applogo"
-                    android:src="@drawable/money_lover_logo"
-                    tools:ignore="InefficientWeight,ImageContrastCheck" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="16dp"
+            <LinearLayout
+                android:id="@+id/linearLayout4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/appLogo"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/balanceHeaderTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter_medium"
+                    android:text="@string/balance"
+                    android:textAlignment="viewStart"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/balanceHeaderStat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter_medium"
                     android:gravity="center"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/balanceHeaderTitle"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/inter_medium"
-                        android:text="@string/balance"
-                        android:textAlignment="viewStart"
-                        android:textSize="14sp" />
-
-                    <TextView
-                        android:id="@+id/balanceHeaderStat"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="right"
-                        android:layout_marginTop="2dp"
-                        android:fontFamily="@font/inter_medium"
-                        android:gravity="center"
-                        android:text="@string/pricePlaceholder"
-                        android:textAlignment="viewStart"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        tools:ignore="RtlCompat,RtlHardcoded" />
-                </LinearLayout>
-
+                    android:text="@string/pricePlaceholder"
+                    android:textAlignment="viewStart"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    tools:ignore="RtlCompat,RtlHardcoded" />
             </LinearLayout>
 
-        </LinearLayout>
+            <ImageView
+                android:id="@+id/reloadBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="12dp"
+                android:background="@drawable/rounded_corner_white"
+                android:elevation="4dp"
+                android:padding="8dp"
+                android:src="@drawable/ic_cloud_sync"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:contentDescription="@string/todo" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
@@ -116,18 +134,18 @@
                     android:id="@+id/monthTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/rounded_corner"
+                    android:background="@drawable/rounded_corner_gray"
                     android:fontFamily="@font/inter"
                     android:paddingHorizontal="10dp"
                     android:paddingVertical="4dp"
                     android:text="@string/title_date_placeholder"
                     android:textSize="16sp"
                     android:textStyle="bold"
+                    app:drawableLeftCompat="@drawable/ic_calender"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/nextMonthBtn"
                     app:layout_constraintStart_toEndOf="@+id/prevMonthBtn"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:drawableLeftCompat="@drawable/ic_calender" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
                     android:id="@+id/prevMonthBtn"
@@ -184,8 +202,8 @@
                         android:layout_width="36dp"
                         android:layout_height="36dp"
                         android:layout_marginVertical="8dp"
-                        app:srcCompat="@drawable/ic_expenses"
-                        android:contentDescription="@string/expense_logo"/>
+                        android:contentDescription="@string/expense_logo"
+                        app:srcCompat="@drawable/ic_expenses" />
 
                     <TextView
                         android:id="@+id/expenseStat"
@@ -226,8 +244,8 @@
                         android:layout_width="36dp"
                         android:layout_height="36dp"
                         android:layout_marginVertical="8dp"
-                        app:srcCompat="@drawable/ic_balance"
-                        android:contentDescription="@string/balance_logo"/>
+                        android:contentDescription="@string/balance_logo"
+                        app:srcCompat="@drawable/ic_balance" />
 
                     <TextView
                         android:id="@+id/balanceStat"
@@ -267,8 +285,8 @@
                         android:layout_width="36dp"
                         android:layout_height="36dp"
                         android:layout_marginVertical="8dp"
-                        app:srcCompat="@drawable/ic_income"
-                        android:contentDescription="@string/income_logo"/>
+                        android:contentDescription="@string/income_logo"
+                        app:srcCompat="@drawable/ic_income" />
 
 
                     <TextView
@@ -295,12 +313,14 @@
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="#fafafa"
             android:fillViewport="true">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/expensesRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="#fafafa"
                 android:paddingBottom="128dp" />
 
         </androidx.core.widget.NestedScrollView>
