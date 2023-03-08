@@ -114,9 +114,6 @@ public class HomeFragment extends Fragment {
             startActivity(intent);
         });
 
-        if(fAuth.getCurrentUser() != null)
-            loadData(binding);
-
         reloadBtn = binding.reloadBtn;
         reloadBtn.setOnClickListener(view -> loadData(binding));
 
@@ -125,6 +122,9 @@ public class HomeFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+
+        if(fAuth.getCurrentUser() != null)
+            loadData(binding);
     }
 
     private void loadData(FragmentHomeBinding binding){

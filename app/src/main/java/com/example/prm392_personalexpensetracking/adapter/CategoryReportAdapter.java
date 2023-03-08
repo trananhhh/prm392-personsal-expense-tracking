@@ -18,19 +18,20 @@ import com.example.prm392_personalexpensetracking.ExpenseActivity;
 import com.example.prm392_personalexpensetracking.MainActivity;
 import com.example.prm392_personalexpensetracking.R;
 import com.example.prm392_personalexpensetracking.model.Category;
+import com.example.prm392_personalexpensetracking.model.CategoryReport;
 import com.example.prm392_personalexpensetracking.model.Expense;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class ExpensesReportAdapter extends RecyclerView.Adapter<ExpensesReportAdapter.ViewHolder> {
+public class CategoryReportAdapter extends RecyclerView.Adapter<CategoryReportAdapter.ViewHolder> {
 
-    private final ArrayList<Expense> expenseList;
+    private final ArrayList<CategoryReport> categoryReportArrayList;
     private Context context;
     private Calendar calendar;
 
-    public ExpensesReportAdapter(ArrayList<Expense> expenseList, Context context) {
-        this.expenseList = expenseList;
+    public CategoryReportAdapter(ArrayList<CategoryReport> expenseList, Context context) {
+        this.categoryReportArrayList = expenseList;
         this.context = context;
     }
 
@@ -45,14 +46,14 @@ public class ExpensesReportAdapter extends RecyclerView.Adapter<ExpensesReportAd
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Expense expense = expenseList.get(position);
-        Category category = Category.getCategoryById(expense.getCateId());
+        CategoryReport categoryReport = categoryReportArrayList.get(position);
+        Category category = categoryReport.getCategory();
 
         holder.catTitle.setText(category.getCateName());
-        holder.description.setText(expense.getDescription());
-        holder.price.setText(MainActivity.intToMoneyFormat(expense.getAmount()));
+        holder.description.setText(categoryReport.getCount() + " transaction(s)");
+        holder.price.setText("-" + MainActivity.intToMoneyFormat(categoryReport.getSum()));
         holder.catIcon.setImageResource(category.getImage());
-//        holder.expenseDate.setText(getDayMonthText(expense.getCreateAt()));
+        holder.expenseDate.setText(categoryReport.getPercent() + "%");
 
         if(category.getType() == 2){
             holder.price.setTextColor(ContextCompat.getColor(context, R.color.green_income));
@@ -61,27 +62,27 @@ public class ExpensesReportAdapter extends RecyclerView.Adapter<ExpensesReportAd
                 holder.price.setTextColor(ContextCompat.getColor(context, R.color.red_expense));
             }
 
-        holder.dashboardExpenseItem.setOnClickListener(view -> {
-            Intent intent = new Intent(context, ExpenseActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("selected_expense", expense);
-            intent.putExtras(bundle);
-            context.startActivity(intent);
-        });
+//        holder.dashboardExpenseItem.setOnClickListener(view -> {
+//            Intent intent = new Intent(context, ExpenseActivity.class);
+//            Bundle bundle = new Bundle();
+//            bundle.putSerializable("selected_expense", categoryReport);
+//            intent.putExtras(bundle);
+//            context.startActivity(intent);
+//        });
     }
 
     @Override
     public int getItemCount() {
-        return expenseList.size();
+        return categoryReportArrayList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        final ExpensesReportAdapter mAdapter;
+        final CategoryReportAdapter mAdapter;
         private ConstraintLayout dashboardExpenseItem;
         private ImageView catIcon;
         private TextView catTitle, description, price, expenseDate;
 
-        public ViewHolder(@NonNull View itemView, ExpensesReportAdapter expensesDayAdapter) {
+        public ViewHolder(@NonNull View itemView, CategoryReportAdapter expensesDayAdapter) {
             super(itemView);
             this.mAdapter = expensesDayAdapter;
             dashboardExpenseItem = itemView.findViewById(R.id.dashboard_expense_item);
