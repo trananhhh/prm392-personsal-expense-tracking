@@ -44,8 +44,8 @@ public class ReportFragment extends Fragment {
     private int totalExpenses = 0, currentBalance = 0, totalIncome = 0;
     FirebaseFirestore fStore;
     FirebaseAuth fAuth;
-    private ArrayList<Expense> expenseArrayList = new ArrayList<>();
-    private Map<Integer, ArrayList<Expense>> catReportMap = new HashMap<>();
+    private ArrayList<Expense> expenseArrayList;
+    private Map<Integer, ArrayList<Expense>> catReportMap;
     private ArrayList<CategoryReport> catRenderList = new ArrayList<>();
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -79,8 +79,6 @@ public class ReportFragment extends Fragment {
     }
 
     private void bindingRecyclerView(FragmentReportBinding binding){
-        Log.d("catRenderList", catRenderList.toString());
-
         mRecyclerView = binding.categoriesRecyclerView;
         mExpenseAdapter = new CategoryReportAdapter(catRenderList, getContext());
         mRecyclerView.setAdapter(mExpenseAdapter);
@@ -91,7 +89,11 @@ public class ReportFragment extends Fragment {
         fStore.collection("Data").document(fAuth.getUid()).collection("Expenses").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                catReportMap = new HashMap<>();
+                catRenderList = new ArrayList<>();
+
                 catReportMap.clear();
+                catRenderList.clear();
                 for(DocumentSnapshot ds:task.getResult()){
                     tmpCal.setTime(ds.getDate("createAt"));
                     if (tmpCal.get(Calendar.YEAR) == currentMonth.get(Calendar.YEAR) && tmpCal.get(Calendar.MONTH) == currentMonth.get(Calendar.MONTH)){
@@ -114,9 +116,6 @@ public class ReportFragment extends Fragment {
                     }
                 };
                 bindingRecyclerView(binding);
-
-                Log.d("ReportFrag", String.valueOf(totalExpenses));
-                Log.d("ReportFrag", String.valueOf(totalIncome));
 
                 Set<Integer> set = catReportMap.keySet();
                 for (Integer key : set) {
