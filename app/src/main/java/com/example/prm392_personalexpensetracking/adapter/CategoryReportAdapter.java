@@ -21,6 +21,7 @@ import com.example.prm392_personalexpensetracking.model.Category;
 import com.example.prm392_personalexpensetracking.model.CategoryReport;
 import com.example.prm392_personalexpensetracking.model.Expense;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -46,14 +47,16 @@ public class CategoryReportAdapter extends RecyclerView.Adapter<CategoryReportAd
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        DecimalFormat formater = new DecimalFormat("#.##");
+
         CategoryReport categoryReport = categoryReportArrayList.get(position);
         Category category = categoryReport.getCategory();
 
         holder.catTitle.setText(category.getCateName());
-        holder.description.setText(categoryReport.getCount() + " transaction(s)");
-        holder.price.setText("-" + MainActivity.intToMoneyFormat(categoryReport.getSum()));
+        holder.description.setText(categoryReport.getCount() + " transaction" + (categoryReport.getCount() > 1 ? "s" : ""));
+        holder.price.setText(MainActivity.intToMoneyFormat(categoryReport.getSum()));
         holder.catIcon.setImageResource(category.getImage());
-        holder.expenseDate.setText(categoryReport.getPercent() + "%");
+        holder.expenseDate.setText(formater.format(categoryReport.getPercent()) + "%");
 
         if(category.getType() == 2){
             holder.price.setTextColor(ContextCompat.getColor(context, R.color.green_income));

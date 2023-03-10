@@ -82,71 +82,71 @@ public class Category {
     public static void initCategory(){
         categoriesList.clear();
         if(categoriesList.isEmpty()){
-            categoriesList.add(new Category(2, "Food & Beverage", -1, 1));
-            categoriesList.add(new Category(15, "Party", 2, 1));
-            categoriesList.add(new Category(7, "Cafe", 2, 1));
+            categoriesList.add(new Category(102, "Food & Beverage", -1, 1));
+            categoriesList.add(new Category(115, "Party", 2, 1));
+            categoriesList.add(new Category(107, "Cafe", 2, 1));
 
-            categoriesList.add(new Category(16, "Self Development", -1, 1));
-            categoriesList.add(new Category(9, "Education", 16, 1));
-            categoriesList.add(new Category(17, "Sport", 16, 1));
-            categoriesList.add(new Category(13, "Health", 16, 1));
+            categoriesList.add(new Category(116, "Self Development", -1, 1));
+            categoriesList.add(new Category(109, "Education", 16, 1));
+            categoriesList.add(new Category(117, "Sport", 16, 1));
+            categoriesList.add(new Category(113, "Health", 16, 1));
 
-            categoriesList.add(new Category(1, "Shopping", -1, 1));
-            categoriesList.add(new Category(10, "Electronics", 1, 1));
+            categoriesList.add(new Category(101, "Shopping", -1, 1));
+            categoriesList.add(new Category(110, "Electronics", 1, 1));
 
-            categoriesList.add(new Category(3, "Transport", -1, 1));
-            categoriesList.add(new Category(14, "Maintenance", 3, 1));
-            categoriesList.add(new Category(11, "Fuel", 3, 1));
+            categoriesList.add(new Category(103, "Transport", -1, 1));
+            categoriesList.add(new Category(114, "Maintenance", 3, 1));
+            categoriesList.add(new Category(111, "Fuel", 3, 1));
 
-            categoriesList.add(new Category(4, "Bills & Utilities", -1, 1));
-            categoriesList.add(new Category(8, "Donate", -1, 1));
-            categoriesList.add(new Category(18, "Savings", -1, 1));
-            categoriesList.add(new Category(5, "Other", -1, 1));
+            categoriesList.add(new Category(104, "Bills & Utilities", -1, 1));
+            categoriesList.add(new Category(108, "Donate", -1, 1));
+            categoriesList.add(new Category(118, "Savings", -1, 1));
+            categoriesList.add(new Category(105, "Other", -1, 1));
 
-            categoriesList.add(new Category(6, "Salary", -1, 2));
-            categoriesList.add(new Category(12, "Gifts", -1, 2));
-            categoriesList.add(new Category(19, "Other", -1, 2));
+            categoriesList.add(new Category(206, "Salary", -1, 2));
+            categoriesList.add(new Category(212, "Gifts", -1, 2));
+            categoriesList.add(new Category(219, "Other", -1, 2));
         }
     }
 
     public int getImage(){
         switch (getCateId()){
-            case 1:
+            case 101:
                 return R.drawable.groceries;
-            case 2:
+            case 102:
                 return R.drawable.restaurant;
-            case 3:
+            case 103:
                 return R.drawable.transportation;
-            case 4:
+            case 104:
                 return R.drawable.laundry;
-            case 5:
-            case 19:
+            case 105:
+            case 219:
                 return R.drawable.money;
-            case 6:
+            case 206:
                 return R.drawable.institute;
-            case 7:
+            case 107:
                 return R.drawable.cafe;
-            case 8:
+            case 108:
                 return R.drawable.donate;
-            case 9:
+            case 109:
                 return R.drawable.education;
-            case 10:
+            case 110:
                 return R.drawable.electronics;
-            case 11:
+            case 111:
                 return R.drawable.fuel;
-            case 12:
+            case 212:
                 return R.drawable.gifts;
-            case 13:
+            case 113:
                 return R.drawable.health;
-            case 14:
+            case 114:
                 return R.drawable.maintenance;
-            case 15:
+            case 115:
                 return R.drawable.party;
-            case 16:
+            case 116:
                 return R.drawable.self_development;
-            case 17:
+            case 117:
                 return R.drawable.sport;
-            case 18:
+            case 118:
                 return R.drawable.savings;
         }
 //        return R.drawable.groceries;

@@ -1,5 +1,6 @@
 package com.example.prm392_personalexpensetracking.ui.report;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,6 +22,12 @@ import com.example.prm392_personalexpensetracking.databinding.FragmentReportBind
 import com.example.prm392_personalexpensetracking.model.Category;
 import com.example.prm392_personalexpensetracking.model.CategoryReport;
 import com.example.prm392_personalexpensetracking.model.Expense;
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -47,6 +55,10 @@ public class ReportFragment extends Fragment {
     private ArrayList<Expense> expenseArrayList;
     private Map<Integer, ArrayList<Expense>> catReportMap;
     private ArrayList<CategoryReport> catRenderList = new ArrayList<>();
+    private ArrayList<PieEntry> incomePieEntries = new ArrayList<>();
+    private ArrayList<PieEntry> outcomePieEntries = new ArrayList<>();
+
+    PieChart pieChartIncome, pieChartOutcome;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentReportBinding.inflate(inflater, container, false);
@@ -62,6 +74,9 @@ public class ReportFragment extends Fragment {
 
         prevMonthBtn = binding.prevMonthBtn;
         nextMonthBtn = binding.nextMonthBtn;
+
+        pieChartIncome = binding.reportPieChartIncome;
+        pieChartOutcome = binding.reportPieChartOutcome;
 
         prevMonthBtn.setOnClickListener(view -> {
             currentMonth.add(Calendar.MONTH, -1);
@@ -86,6 +101,10 @@ public class ReportFragment extends Fragment {
     }
     private void loadData(FragmentReportBinding binding){
         Calendar tmpCal = Calendar.getInstance();
+        totalExpenses = 0;
+        totalIncome = 0;
+        outcomePieEntries.clear();
+        incomePieEntries.clear();
         fStore.collection("Data").document(fAuth.getUid()).collection("Expenses").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -112,7 +131,6 @@ public class ReportFragment extends Fragment {
                             totalExpenses += Math.toIntExact(ds.getLong("amount"));
                         else
                             totalIncome += Math.toIntExact(ds.getLong("amount"));
-
                     }
                 };
                 bindingRecyclerView(binding);
@@ -121,8 +139,28 @@ public class ReportFragment extends Fragment {
                 for (Integer key : set) {
                     ArrayList<Expense> thisExpenseList = catReportMap.get(key);
                     Integer sum = thisExpenseList.stream().map(expense -> expense.getAmount()).reduce(0, Integer::sum);
-                    catRenderList.add(new CategoryReport(Category.getCategoryById(key), thisExpenseList.size(), sum, (totalExpenses == 0 ? 1 : sum / totalExpenses * 100)));
+                    Category thisCat = Category.getCategoryById(key);
+                    catRenderList.add(new CategoryReport(thisCat, thisExpenseList.size(), sum, calExpensePercent(thisCat.getType(), sum)));
+                    PieEntry pieEntry = new PieEntry(sum, ContextCompat.getDrawable(getActivity(), thisCat.getImage()));
+
+                    if(thisCat.getType() == 1)
+                        outcomePieEntries.add(pieEntry);
+                    else
+                        incomePieEntries.add(pieEntry);
                 }
+                catRenderList.sort((CategoryReport ex1, CategoryReport ex2) -> ex1.getCategory().getType() - ex2.getCategory().getType());
+
+                PieDataSet incomePieDataSet = new PieDataSet(incomePieEntries, "Income");
+                incomePieDataSet.setColors(ColorTemplate.LIBERTY_COLORS);
+                pieChartIncome.setData(new PieData(incomePieDataSet));
+                pieChartIncome.animateXY(500,500);
+                pieChartIncome.getDescription().setEnabled(false);
+
+                PieDataSet outcomePieDataSet = new PieDataSet(outcomePieEntries, "Expenses");
+                outcomePieDataSet.setColors(ColorTemplate.PASTEL_COLORS);
+                pieChartOutcome.setData(new PieData(outcomePieDataSet));
+                pieChartOutcome.animateXY(500,500);
+                pieChartOutcome.getDescription().setEnabled(false);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -130,6 +168,13 @@ public class ReportFragment extends Fragment {
                 Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private double calExpensePercent(int catType, int sum){
+        if(catType == 1)
+            return 100.0 * sum / totalExpenses;
+        else
+            return 100.0 * sum / totalIncome;
     }
 
     @Override
