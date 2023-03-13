@@ -17,15 +17,22 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class RegisterActivity extends AppCompatActivity {
-    private FirebaseAuth mAuth;
     private static final String TAG = "EmailPassword";
     EditText nameInput;
     EditText emailInput;
     EditText passwordInput;
     Button signUpBtn;
     TextView suggestLoginBtn;
+
+    FirebaseFirestore fStore;
+    FirebaseUser fUser;
+    FirebaseAuth fAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +45,10 @@ public class RegisterActivity extends AppCompatActivity {
         signUpBtn = findViewById(R.id.signUpBtn);
         suggestLoginBtn = findViewById(R.id.suggestLoginBtn);
 
-        mAuth = FirebaseAuth.getInstance();
+//        Firebase
+        fStore = FirebaseFirestore.getInstance();
+        fAuth = FirebaseAuth.getInstance();
+        fUser = fAuth.getCurrentUser();
 
         suggestLoginBtn.setOnClickListener(view -> {
             startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
@@ -65,15 +75,22 @@ public class RegisterActivity extends AppCompatActivity {
             passwordInput.requestFocus();
         }
         else{
-            mAuth.createUserWithEmailAndPassword(email, password)
+            fAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            Log.d(TAG, "createUserWithEmail:success");
-                            Toast.makeText(RegisterActivity.this, "Authentication success.",
-                                    Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+
+                            Map<String, Object> info = new HashMap<>();
+                            info.put("displayName", name);
+                            info.put("currency", 1);
+
+                            fStore.collection("Data").document(fAuth.getUid()).set(info).addOnSuccessListener(unused -> {
+                                Log.d(TAG, "createUserWithEmail:success");
+                                Toast.makeText(RegisterActivity.this, "Authentication success.",
+                                        Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                            });
                         } else {
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
                             Toast.makeText(RegisterActivity.this, "Authentication failed.",

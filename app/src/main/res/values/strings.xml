@@ -41,4 +41,5 @@
     <string name="pricePlaceholder">0 đ</string>
     <string name="todo">TODO</string>
     <string name="statistics">Statistics</string>
+    <string name="settings">Settings</string>
 </resources>
