@@ -1,4 +1,6 @@
 package com.example.prm392_personalexpensetracking;
+import static android.content.ContentValues.TAG;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,9 +31,13 @@ import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
-    static FirebaseAuth fAuth;
+    public static String displayName = "";
+    public static String email = "";
+    public static String currency = "đ";
+    FirebaseAuth fAuth;
+    FirebaseFirestore fStore;
     public static String intToMoneyFormat(int amount){
-        return (String.format("%,d", amount) + " đ");
+        return (String.format("%,d", amount) + " " + currency);
     }
 
     @Override
@@ -39,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
 
+//        Firebase
+        fStore = FirebaseFirestore.getInstance();
         fAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = fAuth.getCurrentUser();
 
@@ -46,9 +54,14 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
         }
         setContentView(binding.getRoot());
+        if(displayName.isEmpty())
+            saveProfileInfo();
 
         ExpenseType.initExpenseType();
         Category.initCategory();
+
+//        if(displayName.isEmpty() || email.isEmpty())
+//            LoginActivity.saveProfileInfo();
 
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_home, R.id.navigation_report, R.id.navigation_settings)
@@ -66,6 +79,25 @@ public class MainActivity extends AppCompatActivity {
         return new SimpleDateFormat("MMM, yyyy").format(cur.getTime());
     }
 
+    public void saveProfileInfo(){
+        fStore.collection("Data").document(fAuth.getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        displayName = document.getString("displayName");
+                        currency = document.getString("currency");
+                        email = fAuth.getCurrentUser().getEmail();
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
+    }
 
 //    public static void fetchDataFirebase(){
 //        totalBalance = 0;

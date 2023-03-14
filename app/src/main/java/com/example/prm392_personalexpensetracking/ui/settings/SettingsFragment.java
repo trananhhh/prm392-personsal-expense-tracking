@@ -1,48 +1,28 @@
 package com.example.prm392_personalexpensetracking.ui.settings;
 
-import static android.content.ContentValues.TAG;
-
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.example.prm392_personalexpensetracking.ExpenseActivity;
 import com.example.prm392_personalexpensetracking.LoginActivity;
+import com.example.prm392_personalexpensetracking.MainActivity;
 import com.example.prm392_personalexpensetracking.R;
 import com.example.prm392_personalexpensetracking.databinding.FragmentSettingsBinding;
-import com.example.prm392_personalexpensetracking.model.Category;
-import com.example.prm392_personalexpensetracking.model.CategoryReport;
-import com.example.prm392_personalexpensetracking.model.Expense;
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.utils.ColorTemplate;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
-
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Set;
 
 public class SettingsFragment extends Fragment {
 
@@ -52,6 +32,8 @@ public class SettingsFragment extends Fragment {
     FirebaseFirestore fStore;
     FirebaseAuth fAuth;
     FirebaseUser fUser;
+
+    Dialog dialog;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -65,14 +47,17 @@ public class SettingsFragment extends Fragment {
         textViewUsername = binding.textViewUsername;
         textViewEmail = binding.textViewEmail;
 
-        setProfileName();
+        textViewUsername.setText(MainActivity.displayName);
+        textViewEmail.setText(MainActivity.email);
 
         currencyBtn = binding.chooseCurrencyBtn;
         languageBtn = binding.languageBtn;
         faqBtn = binding.faqBtn;
         logOutBtn = binding.signOutBtn;
 
-        currencyBtn.setOnClickListener(view -> showCustomDialog());
+        currencyBtn.setOnClickListener(view -> showCurrencyDialog());
+        languageBtn.setOnClickListener(view -> showLanguageDialog());
+        faqBtn.setOnClickListener(view -> showFaqDialog());
 
         logOutBtn.setOnClickListener(view -> {
             fAuth.signOut();
@@ -84,57 +69,65 @@ public class SettingsFragment extends Fragment {
         return root;
     }
 
-    private void setProfileName(){
-        fStore.collection("Data").document(fAuth.getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        textViewUsername.setText(document.getString("displayName"));
-                        textViewEmail.setText(fAuth.getCurrentUser().getEmail());
-                    } else {
-                        Log.d(TAG, "No such document");
-                    }
-                } else {
-                    Log.d(TAG, "get failed with ", task.getException());
-                }
-            }
-        });
-    }
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
     }
 
-    void showCustomDialog() {
-        final Dialog dialog = new Dialog(getActivity());
-        //We have added a title in the custom layout. So let's disable the default title.
+    void showCurrencyDialog() {
+        dialog = new Dialog(getActivity());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        //The user will be able to cancel the dialog bu clicking anywhere outside the dialog.
         dialog.setCancelable(true);
-        //Mention the name of the layout of your custom dialog.
         dialog.setContentView(R.layout.currency_dialog);
 
-        //Initializing the views of the dialog.
-        final EditText nameEt = dialog.findViewById(R.id.name_et);
-        final EditText ageEt = dialog.findViewById(R.id.age_et);
-        final CheckBox termsCb = dialog.findViewById(R.id.terms_cb);
-        Button submitButton = dialog.findViewById(R.id.submit_button);
+        final RadioButton usdBtn = dialog.findViewById(R.id.usdBtn);
+        final RadioButton vndBtn = dialog.findViewById(R.id.vndBtn);
+        final RadioButton euroBtn = dialog.findViewById(R.id.euroBtn);
+        Button submitButton = dialog.findViewById(R.id.saveBtn);
 
+        if(MainActivity.currency == "$") usdBtn.setChecked(true);
+        if(MainActivity.currency == "đ") vndBtn.setChecked(true);
+        if(MainActivity.currency == "€") euroBtn.setChecked(true);
 
-        submitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String name = nameEt.getText().toString();
-                String age = ageEt.getText().toString();
-                Boolean hasAccepted = termsCb.isChecked();
-//                populateInfoTv(name,age,hasAccepted);
-                dialog.dismiss();
-            }
-        });
+        usdBtn.setOnClickListener(view -> MainActivity.currency = "$");
+        vndBtn.setOnClickListener(view -> MainActivity.currency = "đ");
+        euroBtn.setOnClickListener(view -> MainActivity.currency = "€");
+
+        submitButton.setOnClickListener(view -> setCurrency(MainActivity.currency));
+
+        dialog.show();
+    }
+
+    private void setCurrency(String currency){
+        fStore.collection("Data").document(fAuth.getUid()).update("currency", currency).addOnSuccessListener(unused -> {
+            Toast.makeText(getActivity(), "Saved", Toast.LENGTH_SHORT).show();
+            dialog.dismiss();
+        }).addOnFailureListener(e -> Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show());
+
+    }
+    void showLanguageDialog() {
+        final Dialog dialog = new Dialog(getActivity());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.language_dialog);
+
+        final RadioButton engBtn = dialog.findViewById(R.id.engBtn);
+        engBtn.setChecked(true);
+
+        Button submitButton = dialog.findViewById(R.id.saveBtn);
+        submitButton.setOnClickListener(view -> dialog.dismiss());
+
+        dialog.show();
+    }
+    void showFaqDialog() {
+        final Dialog dialog = new Dialog(getActivity());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.faq_dialog);
+
+        Button submitButton = dialog.findViewById(R.id.saveBtn);
+        submitButton.setOnClickListener(view -> dialog.dismiss());
 
         dialog.show();
     }

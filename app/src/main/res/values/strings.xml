@@ -25,7 +25,7 @@
     <string name="back_button">Back button</string>
     <string name="next_button">Next button</string>
     <string name="expense_logo">Expenses logo</string>
-    <string name="money_placeholder">0 đ</string>
+    <string name="money_placeholder">0</string>
     <string name="expenses">Expenses</string>
     <string name="balance_logo">Balance logo</string>
     <string name="balance">Balance</string>
@@ -36,9 +36,9 @@
     <string name="transaction_category_icon">Transaction category icon</string>
     <string name="dashboardExpenseItemTitlePlaceholder">Shopping</string>
     <string name="dashboardExpenseItemDesPlaceholder">soap, milk</string>
-    <string name="dashboardExpenseItemPricePlaceholder">0 đ</string>
+    <string name="dashboardExpenseItemPricePlaceholder">0</string>
     <string name="applogo">appLogo</string>
-    <string name="pricePlaceholder">0 đ</string>
+    <string name="pricePlaceholder">0</string>
     <string name="todo">TODO</string>
     <string name="statistics">Statistics</string>
     <string name="settings">Settings</string>

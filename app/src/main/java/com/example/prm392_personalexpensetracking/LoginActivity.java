@@ -1,5 +1,7 @@
 package com.example.prm392_personalexpensetracking;
 
+import static android.content.ContentValues.TAG;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -18,10 +20,13 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class LoginActivity extends AppCompatActivity {
-    private FirebaseAuth mAuth;
-    private static final String TAG = "EmailPassword";
+    FirebaseFirestore fStore;
+    FirebaseAuth fAuth;
+    FirebaseUser fUser;
     EditText emailInput;
     EditText passwordInput;
     Button loginBtn;
@@ -37,7 +42,10 @@ public class LoginActivity extends AppCompatActivity {
         loginBtn = findViewById(R.id.loginBtn);
         suggestSignUpBtn = findViewById(R.id.suggestRegisterBtn);
 
-        mAuth = FirebaseAuth.getInstance();
+//        Firebase
+        fStore = FirebaseFirestore.getInstance();
+        fAuth = FirebaseAuth.getInstance();
+        fUser = fAuth.getCurrentUser();
 
         suggestSignUpBtn.setOnClickListener(view -> {
             startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
@@ -59,11 +67,12 @@ public class LoginActivity extends AppCompatActivity {
             passwordInput.setError("Password cannot be empty!");
             passwordInput.requestFocus();
         } else {
-            mAuth.signInWithEmailAndPassword(email, password)
+            fAuth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
+//                                saveProfileInfo();
                                 Log.d(TAG, "signInWithEmail:success");
                                 Toast.makeText(LoginActivity.this, "Login successfully!.",
                                         Toast.LENGTH_SHORT).show();

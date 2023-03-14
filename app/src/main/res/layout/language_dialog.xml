@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:fontFamily="@font/inter_medium"
-        android:text="Choose currency"
+        android:text="Choose language"
         android:textColor="@color/black"
         android:textSize="24sp"
         android:textStyle="bold" />
@@ -27,22 +27,11 @@
             android:layout_height="match_parent">
 
             <RadioButton
-                android:id="@+id/usdBtn"
+                android:id="@+id/engBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Dollar - $" />
+                android:text="English" />
 
-            <RadioButton
-                android:id="@+id/vndBtn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="VietNamDong - đ" />
-
-            <RadioButton
-                android:id="@+id/euroBtn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Euro - €" />
         </RadioGroup>
     </LinearLayout>
 
