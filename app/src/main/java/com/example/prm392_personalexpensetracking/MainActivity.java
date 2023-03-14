@@ -37,7 +37,10 @@ public class MainActivity extends AppCompatActivity {
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
     public static String intToMoneyFormat(int amount){
-        return (String.format("%,d", amount) + " " + currency);
+        if(currency == "đ")
+            return (String.format("%,d", amount) + " " + currency);
+        else
+            return (currency + " " + String.format("%,d", amount));
     }
 
     @Override
