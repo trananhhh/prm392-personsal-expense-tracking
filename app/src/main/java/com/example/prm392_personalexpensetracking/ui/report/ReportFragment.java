@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -141,7 +142,8 @@ public class ReportFragment extends Fragment {
                     Integer sum = thisExpenseList.stream().map(expense -> expense.getAmount()).reduce(0, Integer::sum);
                     Category thisCat = Category.getCategoryById(key);
                     catRenderList.add(new CategoryReport(thisCat, thisExpenseList.size(), sum, calExpensePercent(thisCat.getType(), sum)));
-                    PieEntry pieEntry = new PieEntry(sum, ContextCompat.getDrawable(getActivity(), thisCat.getImage()));
+//                    PieEntry pieEntry = new PieEntry(sum, ContextCompat.getDrawable(getActivity(), thisCat.getImage()));
+                    PieEntry pieEntry = new PieEntry(sum, ResourcesCompat.getDrawable(getResources(), thisCat.getImage(), null));
 
                     if(thisCat.getType() == 1)
                         outcomePieEntries.add(pieEntry);

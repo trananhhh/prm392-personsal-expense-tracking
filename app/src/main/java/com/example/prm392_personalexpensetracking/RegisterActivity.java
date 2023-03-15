@@ -81,18 +81,14 @@ public class RegisterActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-
                             Map<String, Object> info = new HashMap<>();
                             info.put("displayName", name);
-                            info.put("currency", 1);
-//                            fStore.collection("Data").document(fAuth.getUid()).collection("Expenses").document(id).set(transaction).addOnSuccessListener(unused -> {
-                            fStore.collection("Data").document(fAuth.getUid()).collection("Expenses").document(UUID.randomUUID().toString()).set(null).addOnSuccessListener(unused1 -> {
-                                fStore.collection("Data").document(fAuth.getUid()).set(info).addOnSuccessListener(unused2 -> {
-                                    Log.d(TAG, "createUserWithEmail:success");
-                                    Toast.makeText(RegisterActivity.this, "Authentication success.",
-                                            Toast.LENGTH_SHORT).show();
-                                    startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
-                                });
+                            info.put("currency", "đ");
+                            fStore.collection("Data").document(fAuth.getUid()).set(info).addOnSuccessListener(unused2 -> {
+                                Log.d(TAG, "createUserWithEmail:success");
+                                Toast.makeText(RegisterActivity.this, "Authentication success.",
+                                        Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
                             });
                         } else {
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
@@ -105,3 +101,21 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
 }
+
+
+//Forgot password
+
+/*
+FirebaseAuth auth = FirebaseAuth.getInstance();
+String emailAddress = "user@example.com";
+
+auth.sendPasswordResetEmail(emailAddress)
+        .addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    Log.d(TAG, "Email sent.");
+                }
+            }
+        });
+ */

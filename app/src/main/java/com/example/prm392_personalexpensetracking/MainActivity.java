@@ -9,6 +9,7 @@ import com.example.prm392_personalexpensetracking.model.Category;
 import com.example.prm392_personalexpensetracking.model.Expense;
 import com.example.prm392_personalexpensetracking.model.ExpenseType;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.example.prm392_personalexpensetracking.databinding.ActivityMainBinding;
@@ -58,14 +59,11 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
         }
         setContentView(binding.getRoot());
-        if(displayName.isEmpty())
-            saveProfileInfo();
+//        if(displayName.length() == 0)
+//            saveProfileInfo();
 
         ExpenseType.initExpenseType();
         Category.initCategory();
-
-//        if(displayName.isEmpty() || email.isEmpty())
-//            LoginActivity.saveProfileInfo();
 
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_home, R.id.navigation_report, R.id.navigation_settings)
@@ -81,28 +79,5 @@ public class MainActivity extends AppCompatActivity {
 
     public static String getMonthTitle(Calendar cur){
         return new SimpleDateFormat("MMM, yyyy").format(cur.getTime());
-    }
-
-    public void saveProfileInfo(){
-        if(currentUser != null)
-            fStore.collection("Data").document(currentUser.getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
-                        if (document.exists()) {
-                            displayName = document.getString("displayName");
-                            currency = document.getString("currency");
-
-//                            if(currentUser != null)
-//                                email = currentUser.getEmail();
-                        } else {
-                            Log.d(TAG, "No such document");
-                        }
-                    } else {
-                        Log.d(TAG, "get failed with ", task.getException());
-                    }
-                }
-            });
     }
 }

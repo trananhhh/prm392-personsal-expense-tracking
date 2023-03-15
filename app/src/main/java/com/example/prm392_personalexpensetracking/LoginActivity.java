@@ -37,15 +37,18 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        emailInput = findViewById(R.id.loginEmailText);
-        passwordInput = findViewById(R.id.loginPasswordText);
-        loginBtn = findViewById(R.id.loginBtn);
-        suggestSignUpBtn = findViewById(R.id.suggestRegisterBtn);
-
 //        Firebase
         fStore = FirebaseFirestore.getInstance();
         fAuth = FirebaseAuth.getInstance();
         fUser = fAuth.getCurrentUser();
+
+        if(fUser != null)
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+
+        emailInput = findViewById(R.id.loginEmailText);
+        passwordInput = findViewById(R.id.loginPasswordText);
+        loginBtn = findViewById(R.id.loginBtn);
+        suggestSignUpBtn = findViewById(R.id.suggestRegisterBtn);
 
         suggestSignUpBtn.setOnClickListener(view -> {
             startActivity(new Intent(LoginActivity.this, RegisterActivity.class));

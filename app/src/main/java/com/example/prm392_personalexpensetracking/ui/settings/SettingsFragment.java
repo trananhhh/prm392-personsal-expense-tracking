@@ -1,8 +1,11 @@
 package com.example.prm392_personalexpensetracking.ui.settings;
 
+import static android.content.ContentValues.TAG;
+
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,8 +23,13 @@ import com.example.prm392_personalexpensetracking.LoginActivity;
 import com.example.prm392_personalexpensetracking.MainActivity;
 import com.example.prm392_personalexpensetracking.R;
 import com.example.prm392_personalexpensetracking.databinding.FragmentSettingsBinding;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class SettingsFragment extends Fragment {
@@ -47,6 +55,9 @@ public class SettingsFragment extends Fragment {
         textViewUsername = binding.textViewUsername;
         textViewEmail = binding.textViewEmail;
 
+
+        if(MainActivity.displayName.length() == 0)
+            saveProfileInfo();
         textViewUsername.setText(MainActivity.displayName);
         textViewEmail.setText(MainActivity.email);
 
@@ -62,6 +73,7 @@ public class SettingsFragment extends Fragment {
         logOutBtn.setOnClickListener(view -> {
             fAuth.signOut();
             Intent intent = new Intent(getActivity(), LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
         });
 
@@ -130,5 +142,31 @@ public class SettingsFragment extends Fragment {
         submitButton.setOnClickListener(view -> dialog.dismiss());
 
         dialog.show();
+    }
+
+    public static void saveProfileInfo(){
+        final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        final FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+
+        if(firebaseUser != null){
+            String userId = firebaseUser.getUid();
+            firebaseFirestore.collection("Data").document(userId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            MainActivity.displayName = document.getString("displayName");
+                            MainActivity.currency = document.getString("currency");
+                            MainActivity.email = firebaseUser.getEmail();
+                        } else {
+                            Log.d("userInfo", "No such document");
+                        }
+                    } else {
+                        Log.d("userInfo", "get failed with ", task.getException());
+                    }
+                }
+            });
+        }
     }
 }
