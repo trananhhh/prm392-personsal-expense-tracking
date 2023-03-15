@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     public static String currency = "đ";
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
+    FirebaseUser currentUser;
     public static String intToMoneyFormat(int amount){
         if(currency == "đ")
             return (String.format("%,d", amount) + " " + currency);
@@ -51,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
 //        Firebase
         fStore = FirebaseFirestore.getInstance();
         fAuth = FirebaseAuth.getInstance();
-        FirebaseUser currentUser = fAuth.getCurrentUser();
+        currentUser = fAuth.getCurrentUser();
 
         if(currentUser == null) {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
@@ -83,44 +84,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void saveProfileInfo(){
-        fStore.collection("Data").document(fAuth.getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        displayName = document.getString("displayName");
-                        currency = document.getString("currency");
-                        email = fAuth.getCurrentUser().getEmail();
-                    } else {
-                        Log.d(TAG, "No such document");
-                    }
-                } else {
-                    Log.d(TAG, "get failed with ", task.getException());
-                }
-            }
-        });
-    }
+        if(currentUser != null)
+            fStore.collection("Data").document(currentUser.getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            displayName = document.getString("displayName");
+                            currency = document.getString("currency");
 
-//    public static void fetchDataFirebase(){
-//        totalBalance = 0;
-//        fStore.collection("Data").document(fAuth.getUid()).collection("Expenses").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                allExpenseList.clear();
-//                for(DocumentSnapshot ds:task.getResult()){
-//                    totalBalance += Math.toIntExact(ds.getLong("amount")) * (Category.getCategoryById(Math.toIntExact(ds.getLong("cateId"))).getType() == 1 ? -1 : 1);
-//                    Expense expense = new Expense(
-//                            ds.getString("expenseId"),
-//                            Math.toIntExact(ds.getLong("cateId")),
-//                            ds.getString("description"),
-//                            Math.toIntExact(ds.getLong("amount")),
-//                            ds.getDate("createAt")
-//                    );
-//                    allExpenseList.add(expense);
-//                };
-//                allExpenseList.sort((Expense ex1, Expense ex2) -> ex2.getCreateAt().compareTo(ex1.getCreateAt()));
-//            }
-//        });
-//    }
+//                            if(currentUser != null)
+//                                email = currentUser.getEmail();
+                        } else {
+                            Log.d(TAG, "No such document");
+                        }
+                    } else {
+                        Log.d(TAG, "get failed with ", task.getException());
+                    }
+                }
+            });
+    }
 }

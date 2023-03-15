@@ -42,7 +42,7 @@ public class HomeFragment extends Fragment {
     private TextView expenseStat, balanceStat, incomeStat, monthTitle, balanceHeaderStat;
     private ImageView prevMonthBtn, nextMonthBtn, reloadBtn;
     private ExtendedFloatingActionButton addExpenseFab;
-    private ArrayList<Expense> expenseArrayList;
+    private ArrayList<Expense> expenseArrayList = new ArrayList<>();
     private Calendar currentMonth;
 
     FirebaseFirestore fStore;

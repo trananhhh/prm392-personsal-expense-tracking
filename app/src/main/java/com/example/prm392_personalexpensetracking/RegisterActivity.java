@@ -21,6 +21,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class RegisterActivity extends AppCompatActivity {
     private static final String TAG = "EmailPassword";
@@ -84,12 +85,14 @@ public class RegisterActivity extends AppCompatActivity {
                             Map<String, Object> info = new HashMap<>();
                             info.put("displayName", name);
                             info.put("currency", 1);
-
-                            fStore.collection("Data").document(fAuth.getUid()).set(info).addOnSuccessListener(unused -> {
-                                Log.d(TAG, "createUserWithEmail:success");
-                                Toast.makeText(RegisterActivity.this, "Authentication success.",
-                                        Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+//                            fStore.collection("Data").document(fAuth.getUid()).collection("Expenses").document(id).set(transaction).addOnSuccessListener(unused -> {
+                            fStore.collection("Data").document(fAuth.getUid()).collection("Expenses").document(UUID.randomUUID().toString()).set(null).addOnSuccessListener(unused1 -> {
+                                fStore.collection("Data").document(fAuth.getUid()).set(info).addOnSuccessListener(unused2 -> {
+                                    Log.d(TAG, "createUserWithEmail:success");
+                                    Toast.makeText(RegisterActivity.this, "Authentication success.",
+                                            Toast.LENGTH_SHORT).show();
+                                    startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                                });
                             });
                         } else {
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
