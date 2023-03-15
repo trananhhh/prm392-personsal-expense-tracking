@@ -138,6 +138,12 @@ public class SettingsFragment extends Fragment {
         dialog.setCancelable(true);
         dialog.setContentView(R.layout.faq_dialog);
 
+        TextView faqHeader = dialog.findViewById(R.id.faqHeader);
+        TextView faqContent = dialog.findViewById(R.id.faqContent);
+
+        faqHeader.setText("FAQs");
+        faqContent.setText("No one has any questions yet!");
+
         Button submitButton = dialog.findViewById(R.id.saveBtn);
         submitButton.setOnClickListener(view -> dialog.dismiss());
 

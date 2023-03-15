@@ -24,8 +24,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import org.threeten.bp.LocalDate;
+import org.threeten.bp.format.DateTimeFormatter;
+//import java.time.LocalDate;
+//import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -199,7 +201,8 @@ public class ExpenseActivity extends AppCompatActivity {
     }
 
     private String dateToString(int day, int month, int year){
-        LocalDate date = LocalDate.of(year, month, day);
+        LocalDate date = null;
+        date = LocalDate.of(year, month, day);
         return  date.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
     }
 

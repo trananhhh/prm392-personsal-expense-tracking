@@ -3,10 +3,12 @@ package com.example.prm392_personalexpensetracking;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -85,13 +87,9 @@ public class RegisterActivity extends AppCompatActivity {
                             info.put("displayName", name);
                             info.put("currency", "đ");
                             fStore.collection("Data").document(fAuth.getUid()).set(info).addOnSuccessListener(unused2 -> {
-                                Log.d(TAG, "createUserWithEmail:success");
-                                Toast.makeText(RegisterActivity.this, "Authentication success.",
-                                        Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                                sendEmailVerification();
                             });
                         } else {
-                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
                             Toast.makeText(RegisterActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         }
@@ -99,7 +97,41 @@ public class RegisterActivity extends AppCompatActivity {
                 });
         }
     }
+    private void sendEmailVerification() {
+        if (fUser != null) {
+            fUser.sendEmailVerification()
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(RegisterActivity.this, "Email sent!",
+                                    Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(   RegisterActivity.this, LoginActivity.class));
+                            } else {
+                                // Failed to send verification email
+                            }
+                        }
+                    });
+        }
+    }
 
+    private void showVerifyEmailDialog() {
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.faq_dialog);
+
+        TextView faqHeader = dialog.findViewById(R.id.faqHeader);
+        TextView faqContent = dialog.findViewById(R.id.faqContent);
+
+        faqHeader.setText("Notice!");
+        faqHeader.setText("Notice!");
+
+        Button submitButton = dialog.findViewById(R.id.saveBtn);
+        submitButton.setOnClickListener(view -> dialog.dismiss());
+
+        dialog.show();
+    }
 }
 
 
