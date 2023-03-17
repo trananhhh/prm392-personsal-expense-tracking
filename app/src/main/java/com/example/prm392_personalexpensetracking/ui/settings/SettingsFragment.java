@@ -1,7 +1,5 @@
 package com.example.prm392_personalexpensetracking.ui.settings;
 
-import static android.content.ContentValues.TAG;
-
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,17 +16,14 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.example.prm392_personalexpensetracking.ExpenseActivity;
 import com.example.prm392_personalexpensetracking.LoginActivity;
 import com.example.prm392_personalexpensetracking.MainActivity;
 import com.example.prm392_personalexpensetracking.R;
 import com.example.prm392_personalexpensetracking.databinding.FragmentSettingsBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -52,9 +47,19 @@ public class SettingsFragment extends Fragment {
         fAuth = FirebaseAuth.getInstance();
         fUser = fAuth.getCurrentUser();
 
+        if(savedInstanceState == null)
+        {
+            Bundle extras = getActivity().getIntent().getExtras();
+            if (extras != null)
+            {
+                String method = extras.getString("methodName");
+                if (method.equals("chooseCurrency"))
+                    showCurrencyDialog();
+            }
+        }
+
         textViewUsername = binding.textViewUsername;
         textViewEmail = binding.textViewEmail;
-
 
         if(MainActivity.displayName.length() == 0)
             saveProfileInfo();
@@ -138,7 +143,7 @@ public class SettingsFragment extends Fragment {
         dialog.setCancelable(true);
         dialog.setContentView(R.layout.faq_dialog);
 
-        TextView faqHeader = dialog.findViewById(R.id.faqHeader);
+        TextView faqHeader = dialog.findViewById(R.id.forgotPasswordHeader);
         TextView faqContent = dialog.findViewById(R.id.faqContent);
 
         faqHeader.setText("FAQs");

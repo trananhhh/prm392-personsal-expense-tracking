@@ -7,13 +7,14 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.prm392_personalexpensetracking.ui.home.HomeFragment;
+import com.example.prm392_personalexpensetracking.ui.settings.SettingsFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -23,7 +24,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -88,13 +88,19 @@ public class RegisterActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             Map<String, Object> info = new HashMap<>();
                             info.put("displayName", name);
-                            info.put("currency", "đ");
+                            info.put("currency", "$");
 
                             String uid = fAuth.getUid();
-
-                            sendEmailVerification();
                             fStore.collection("Data").document(uid).set(info).addOnSuccessListener(unused2 -> {
-                                sendEmailVerification();
+//                                sendEmailVerification();
+
+                                Toast.makeText(RegisterActivity.this, "Register successfully!",
+                                        Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                intent.putExtra("FRAGMENT_ID", 2);
+//                                intent.putExtra("methodName", "chooseCurrency");
+                                startActivity(intent);
                             });
                         } else {
                             Toast.makeText(RegisterActivity.this, "Authentication failed.",
@@ -104,7 +110,6 @@ public class RegisterActivity extends AppCompatActivity {
                 });
         }
     }
-//    Quizlet63m@trananhpremium.xyz
 
     public boolean isValidPassword(final String password) {
 
@@ -120,6 +125,8 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
     private void sendEmailVerification() {
+        fUser = FirebaseAuth.getInstance().getCurrentUser();
+
         if (fUser != null) {
             fUser.sendEmailVerification()
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -143,7 +150,7 @@ public class RegisterActivity extends AppCompatActivity {
         dialog.setCancelable(true);
         dialog.setContentView(R.layout.faq_dialog);
 
-        TextView faqHeader = dialog.findViewById(R.id.faqHeader);
+        TextView faqHeader = dialog.findViewById(R.id.forgotPasswordHeader);
         TextView faqContent = dialog.findViewById(R.id.faqContent);
 
         faqHeader.setText("Notice!");

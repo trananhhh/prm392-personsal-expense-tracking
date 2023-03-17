@@ -5,10 +5,12 @@ import static android.content.ContentValues.TAG;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -20,7 +22,6 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class LoginActivity extends AppCompatActivity {
@@ -30,7 +31,9 @@ public class LoginActivity extends AppCompatActivity {
     EditText emailInput;
     EditText passwordInput;
     Button loginBtn;
-    TextView suggestSignUpBtn;
+    TextView suggestSignUpBtn, forgotPasswordBtn;
+
+    Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,10 +52,13 @@ public class LoginActivity extends AppCompatActivity {
         passwordInput = findViewById(R.id.loginPasswordText);
         loginBtn = findViewById(R.id.loginBtn);
         suggestSignUpBtn = findViewById(R.id.suggestRegisterBtn);
+        forgotPasswordBtn = findViewById(R.id.forgotPasswordBtn);
 
-        suggestSignUpBtn.setOnClickListener(view -> {
-            startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
-        });
+        suggestSignUpBtn.setOnClickListener(view ->
+            startActivity(new Intent(LoginActivity.this, RegisterActivity.class))
+        );
+
+        forgotPasswordBtn.setOnClickListener(view -> showResetDialog());
 
         loginBtn.setOnClickListener(view -> {
             signIn();
@@ -79,7 +85,9 @@ public class LoginActivity extends AppCompatActivity {
                                 Log.d(TAG, "signInWithEmail:success");
                                 Toast.makeText(LoginActivity.this, "Login successfully!.",
                                         Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
                             } else {
                                 Log.w(TAG, "signInWithEmail:failure", task.getException());
                                 Toast.makeText(LoginActivity.this, "Authentication failed.",
@@ -89,4 +97,40 @@ public class LoginActivity extends AppCompatActivity {
                     });
         }
     }
+
+    private void showResetDialog() {
+        dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.forgot_password_dialog);
+
+        TextInputEditText emailInput = dialog.findViewById(R.id.resetEmailTextInput);
+        Button sendResetMailBtn = dialog.findViewById(R.id.sendResetMailBtn);
+        Button submitButton = dialog.findViewById(R.id.saveBtn);
+
+        sendResetMailBtn.setOnClickListener(view -> {
+            String emailInputText = emailInput.getText().toString();
+            sendResetMail(emailInputText);
+        });
+
+        submitButton.setOnClickListener(view -> {
+            dialog.dismiss();
+        });
+
+        dialog.show();
+    }
+
+    private void sendResetMail(String email){
+        FirebaseAuth.getInstance().sendPasswordResetEmail(email)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(LoginActivity.this, "Email sent!",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
+
 }

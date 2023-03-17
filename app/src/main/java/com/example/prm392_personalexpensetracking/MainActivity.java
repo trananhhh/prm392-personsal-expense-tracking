@@ -60,9 +60,14 @@ public class MainActivity extends AppCompatActivity {
         if(currentUser == null) {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
         }
+
+        int fragmentId = getIntent().getIntExtra("FRAGMENT_ID", 0);
+        if (fragmentId == 2 && savedInstanceState == null){
+
+        }
+
+
         setContentView(binding.getRoot());
-//        if(displayName.length() == 0)
-//            saveProfileInfo();
 
         ExpenseType.initExpenseType();
         Category.initCategory();
