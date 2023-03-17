@@ -24,6 +24,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class RegisterActivity extends AppCompatActivity {
     private static final String TAG = "EmailPassword";
@@ -76,8 +78,9 @@ public class RegisterActivity extends AppCompatActivity {
         } else if (TextUtils.isEmpty(password)) {
             passwordInput.setError("Password cannot be empty!");
             passwordInput.requestFocus();
-        }
-        else{
+        } else  if (!isValidPassword(password.trim())) {
+            Toast.makeText(this, "Choose a stronger password!", Toast.LENGTH_SHORT).show();
+        } else{
             fAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -86,7 +89,11 @@ public class RegisterActivity extends AppCompatActivity {
                             Map<String, Object> info = new HashMap<>();
                             info.put("displayName", name);
                             info.put("currency", "đ");
-                            fStore.collection("Data").document(fAuth.getUid()).set(info).addOnSuccessListener(unused2 -> {
+
+                            String uid = fAuth.getUid();
+
+                            sendEmailVerification();
+                            fStore.collection("Data").document(uid).set(info).addOnSuccessListener(unused2 -> {
                                 sendEmailVerification();
                             });
                         } else {
@@ -97,6 +104,21 @@ public class RegisterActivity extends AppCompatActivity {
                 });
         }
     }
+//    Quizlet63m@trananhpremium.xyz
+
+    public boolean isValidPassword(final String password) {
+
+        Pattern pattern;
+        Matcher matcher;
+
+        final String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{4,}$";
+
+        pattern = Pattern.compile(PASSWORD_PATTERN);
+        matcher = pattern.matcher(password);
+
+        return matcher.matches();
+
+    }
     private void sendEmailVerification() {
         if (fUser != null) {
             fUser.sendEmailVerification()
@@ -106,7 +128,7 @@ public class RegisterActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 Toast.makeText(RegisterActivity.this, "Email sent!",
                                     Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(   RegisterActivity.this, LoginActivity.class));
+                                showVerifyEmailDialog();
                             } else {
                                 // Failed to send verification email
                             }
@@ -125,10 +147,13 @@ public class RegisterActivity extends AppCompatActivity {
         TextView faqContent = dialog.findViewById(R.id.faqContent);
 
         faqHeader.setText("Notice!");
-        faqHeader.setText("Notice!");
+        faqContent.setText("Please verify the account before login!");
 
         Button submitButton = dialog.findViewById(R.id.saveBtn);
-        submitButton.setOnClickListener(view -> dialog.dismiss());
+        submitButton.setOnClickListener(view -> {
+            dialog.dismiss();
+            startActivity(new Intent(   RegisterActivity.this, LoginActivity.class));
+        });
 
         dialog.show();
     }
